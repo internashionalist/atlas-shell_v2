@@ -2,6 +2,17 @@
 
 # Resources
 
+- [wikipedia: Unix Shell](https://en.wikipedia.org/wiki/Unix_shell)
+- [wikipedia: Thompson Shell](https://en.wikipedia.org/wiki/Thompson_shell)
+- [wikipedia: Ken Thompson](https://en.wikipedia.org/wiki/Ken_Thompson)
+- [36.1 Interactive and Non-Interactive Scripts](https://tldp.org/LDP/abs/html/intandnonint.html)
+- [lexers vs parsers](https://stackoverflow.com/questions/2842809/lexers-vs-parsers/3614928#3614928)
+
+## intranet concepts
+
+- [shell v1](https://intranet.atlasschool.com/concepts/900)
+- [shell v2](https://intranet.atlasschool.com/concepts/919)
+
 # Objectives
 
 - how does a shell work
