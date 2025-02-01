@@ -41,55 +41,129 @@
 
 ## Functions and System calls
 
+### syscalls
+
+```c
+/* signatures are simplified; consult man 2 pages */
+
+#include <unistd.h>
+
+	int access(char *path, int mode);
+	int chdir(char *path);
+	int close(int fd);
+	int execve(char *path, char *argv[], char *envp[]);
+	pid_t fork(void);
+	ssize_t read(int fd, void buf[], size_t buf_count);
+	ssize_t write(int fd, void buf[], size_t buf_count);
+	void _exit(int status);
+	int dup(int oldfd);
+	int dup2(int oldfd, int newfd);
+	int pipe(int pipefd[2]);
+	int unlink(char *path);
+	int gethostname(char *name, size_t len);
+	uid_t geteuid(void);
+	pid_t getpid(void);
+
+#include <sys/stat.h>
+
+	int stat(char *path, struct stat *statbuff);   // __xstat
+	int fstat(int fd, struct stat *statbuff);  // __fxstat
+	int lstat(char *path, struct stat *statbuff);  // __lxstat
+
+#include <signal.h>
+
+	typedef void (*sighandler_t)(int);
+
+	int kill(pid_t pid, int sig);
+	sighandler_t signal(int signum, sighandler_t handler);
+	int sigaction(
+		int signum,
+		struct sigaction *act,
+		struct sigaction oldact);
+
+#include <fctl.h>
+
+	int open(char *path, int flags, ... /* mode_t mode */ );
+
+#include <sys/wait.h>
+
+	pid_t wait(int *wstatus);
+	pid_t waitpid(pid_t pid, int *wstatus, int options);
+	pid_t wait3(int *wstatus, int options, struct rusage *rusage);
+	pid_t wait4(pid_t pid, int *wstatus, int options, struct *rusage);
+
+#include <time.h>
+
+	time_t time(time_t *tloc);
+
+#include <sys/select.h>
+
+	int select(
+		int nfds,
+		fd_set *readfds,
+		fd_set *writefds,
+		fd_set *exceptfds,
+		struct timeval *timeout);
 ```
-access
-chdir
-close
-execve
-fork
-stat (__xstat)
-lstat (__lxstat)
-fstat (__fxstat)
-kill
-open
-read
-signal
-wait
-waitpid
-wait3
-wait4
-write
-_exit
-dup
-dup2
-pipe
-unlink
-time
-gethostname
-geteuid
-sigaction
-sigemptyset
-select
-getpid
-__errno_location (errno macros)
-closedir
-exit
-free
-getcwd
-getline
-malloc
-opendir
-perror
-readdir
-strtok
-localtime
-getpwuid
-isatty
-printf
-fflush
-fprintf
-vfprintf
-sprintf
+
+### libcalls
+
+```c
+
+/* libraries can hold both syscalls and non-syscalls 🌠 tmyk */
+
+#include <signal.h>
+	int sigemptyset(sigset_t *set);
+
+#include <sys/types.h>
+#include <dirent.h>
+
+	int closedir(DIR *dirp);
+	DIR *opendir(char *name);
+	struct dirent *readdir(DIR *dirp);
+
+#include <stdlib.h>
+
+	void exit(int status);
+	void free(void *ptr);
+	void *malloc(size_t size);
+
+#include <unistd.h>
+
+	char *getcwd(char buf[], size_t buf_size);
+	int isatty(int fd);
+
+#include <stdio.h>
+#include <errno.h>
+
+	void perror(char *s);
+	ssize_t getline(char **lineptr, size_t *n, FILE *stream);
+	int printf(char *format, ...);
+	int fprintf(FILE *stream, char *format);
+	int vfprintf(FILE *stream, char *format, va_list ap);
+	int sprintf(char *str, char *format, ...);
+	int fflush(FILE *stream);
+
+#include <string.h>
+
+	char *strtok(char *str, char *delim);
+
+#include <time.h>
+
+	struct tm *localtime(time_t *timep);
+
+#include <sys/types.h>
+#include <pwd.h>
+
+	struct passwd *getpwuid(uid_t uid);
+
+```
+### indeterminate
+
+```c
+
+int *__errno_location(void); /* errno macros ? */
+
 ```
 
 ## Compilation
