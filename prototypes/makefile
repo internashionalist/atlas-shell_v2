@@ -40,6 +40,9 @@ wait:
 five: 
 	${CCMD} exec5.c -o exec5.exec 
 
+stat: 
+	${CCMD} stat.c -o stat.exec 
+
 simpsh: 
 	${CCMD} simpsh.c -o simpsh.exec 
 
