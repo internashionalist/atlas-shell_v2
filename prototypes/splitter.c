@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 void print_tokens(char *inputline)
 {
 	char *token = strtok(inputline, " ");

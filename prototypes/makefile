@@ -25,5 +25,8 @@ readline:
 splitter: 
 	${CCMD} splitter.c -o splitter.exec 
 
+execve: 
+	${CCMD} execve.c -o execve.exec 
+
 clean:
 	$(RM) *~ *.exec *.o
