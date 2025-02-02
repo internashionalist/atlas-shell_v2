@@ -28,5 +28,8 @@ splitter:
 execve: 
 	${CCMD} execve.c -o execve.exec 
 
+forker: 
+	${CCMD} forker.c -o forker.exec 
+
 clean:
 	$(RM) *~ *.exec *.o
