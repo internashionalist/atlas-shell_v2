@@ -19,8 +19,11 @@ ppid:
 noargc: 
 	${CCMD} noargc.c -o noargc.exec 
 
-prompt: 
-	${CCMD} prompt.c -o prompt.exec 
+readline: 
+	${CCMD} readline.c -o readline.exec 
+
+splitter: 
+	${CCMD} splitter.c -o splitter.exec 
 
 clean:
 	$(RM) *~ *.exec *.o
