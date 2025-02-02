@@ -23,19 +23,26 @@ char **tokenize(char *inputline)
 	return (tokens);
 }
 
-void print_str_array(char **strings)
+int process_input(char **strings)
 {
-	for (int i = 0; strings[i] != NULL; i++)
-		printf("%d: %s\n", i, strings[i]);
+	int wstatus;
+
+	switch (fork())
+	{
+		case -1:
+			return (-1);
+		case 0:
+			if (execve(strings[0], strings, NULL) == -1)
+				return (-1);
+			break;
+		default:
+			wait(&wstatus);
+	}
+	return (wstatus);
 }
 
 int main(void)
 {
-	/*
-	 * fork, execve, wait
-	 *    pid checks
-	 */
-
 	char *inputline = NULL;
 	char **input_tokens = NULL;
 	size_t input_len = 0;
@@ -44,18 +51,16 @@ int main(void)
 	{
 		printf("$ ");
 
-		if (getline(&inputline, &input_len, stdin) == -1);
+		if (getline(&inputline, &input_len, stdin) == -1)
 			continue;
-
 		if (!strcmp(inputline, "exit\n"))
 			break;
 		else
 		{
 			input_tokens = tokenize(inputline);
-			print_str_array(input_tokens);
+			process_input(input_tokens);
 			free(input_tokens);
 		}
-
 	}
 
 	free(inputline);
