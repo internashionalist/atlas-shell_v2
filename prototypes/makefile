@@ -31,5 +31,11 @@ execve:
 forker: 
 	${CCMD} forker.c -o forker.exec 
 
+wait: 
+	${CCMD} wait.c -o wait.exec 
+
+five: 
+	${CCMD} exec5.c -o exec5.exec 
+
 clean:
 	$(RM) *~ *.exec *.o
