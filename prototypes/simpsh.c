@@ -40,20 +40,23 @@ int main(void)
 	char **input_tokens = NULL;
 	size_t input_len = 0;
 
-	do {
-		if (inputline != NULL)
-		{
-			if (!strcmp(inputline, "exit\n"))
-				break;
-			else
-			{
-				input_tokens = tokenize(inputline);
-				print_str_array(input_tokens);
-				free(input_tokens);
-			}
-		}
+	while (1)
+	{
 		printf("$ ");
-	} while (getline(&inputline, &input_len, stdin));
+
+		if (getline(&inputline, &input_len, stdin) == -1);
+			continue;
+
+		if (!strcmp(inputline, "exit\n"))
+			break;
+		else
+		{
+			input_tokens = tokenize(inputline);
+			print_str_array(input_tokens);
+			free(input_tokens);
+		}
+
+	}
 
 	free(inputline);
 
