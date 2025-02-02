@@ -43,6 +43,12 @@ five:
 stat: 
 	${CCMD} stat.c -o stat.exec 
 
+envmain: 
+	${CCMD} envmain.c -o envmain.exec 
+
+environ: 
+	${CCMD} environ.c -o environ.exec 
+
 simpsh: 
 	${CCMD} simpsh.c -o simpsh.exec 
 

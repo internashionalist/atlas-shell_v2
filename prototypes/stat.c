@@ -15,11 +15,11 @@ int main(int count, char **argv)
 
 	for (int i = 1; argv[i] != NULL; i++)
 	{
-		printf("%s: ", argv[i]);
+		printf("%s: \n\t", argv[i]);
 		if (stat(argv[i], &st) == 0)
 			printf("file confirmed.\n");
 		else
-			printf("file not found.\n");
+			printf("no such file found.\n");
 	}
 
 	return (0);
