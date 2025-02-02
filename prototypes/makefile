@@ -10,6 +10,9 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 
 .PHONY: clean 
 
+
+all: pid ppid noargc readline splitter execve forker wait five simpsh
+
 pid: 
 	${CCMD} pid.c -o pid.exec 
 
@@ -36,6 +39,9 @@ wait:
 
 five: 
 	${CCMD} exec5.c -o exec5.exec 
+
+simpsh: 
+	${CCMD} simpsh.c -o simpsh.exec 
 
 clean:
 	$(RM) *~ *.exec *.o
