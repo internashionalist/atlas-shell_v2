@@ -19,5 +19,8 @@ ppid:
 noargc: 
 	${CCMD} noargc.c -o noargc.exec 
 
+prompt: 
+	${CCMD} prompt.c -o prompt.exec 
+
 clean:
 	$(RM) *~ *.exec *.o
