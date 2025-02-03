@@ -11,7 +11,8 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 .PHONY: clean
 
 
-all: pid ppid noargc readline splitter execve forker wait five simpsh which
+all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
+	environ which simpsh which
 
 pid:
 	${CCMD} pid.c -o pid.exec
