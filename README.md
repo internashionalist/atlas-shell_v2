@@ -8,7 +8,7 @@ Limits or to use string library <string.h> and custom functions.
 	
 ## $\color{Mulberry}{Motivation\ }$
 
-This program is to recreate a shell but in its simplicity to utilize our knowledge thusfar in a group project consisting of two students. Concepts used were functions, function pointers, static libraries, MACROS, recursion, localization and global variables.
+This program is to recreate a shell but in its simplicity to utilize our knowledge thusfar in a group project consisting of three students.
 
 	
 ## $\color{Mulberry}{Code\ Language\ }$
@@ -65,7 +65,7 @@ After compiling successfully and code runs as it should type ./hsh and your prom
 
 ## $\color{Mulberry}{Credits\ }$
 
-Atlas School (Holberton) has created this project for students to utilize to create unique code. This one is done by Malik Vance and Ariel Lopez.
+Atlas School (Holberton) has created this project for students to utilize to create unique code.
 
 ## $\color{Mulberry}{License\ }$
 
