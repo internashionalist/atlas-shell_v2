@@ -18,5 +18,6 @@
 /* prototypes */
 
 int tokenize_input(char *input, char ***tokens)
+int change_directory (const char *pathname, char *old, size_t len)
 
 #endif /* SHELL_H */
