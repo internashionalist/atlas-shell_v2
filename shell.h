@@ -11,6 +11,12 @@
 #include <fcntl.h>
 #include <signal.h>
 
+#define BUFFER_SIZE 1024
+#define TOK_SIZE 128
+#define DELIM " \t\r\n:"
+
 /* prototypes */
+
+int tokenize_input(char *input, char ***tokens)
 
 #endif /* SHELL_H */
