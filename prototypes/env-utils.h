@@ -1,3 +1,6 @@
+#ifndef _ENV_UTILS_
+#define _ENV_UTILS_
+
 /*
  * test the address of **env vs that of extern char **environ
  * write a func that prints each dir in the PATH env var
@@ -14,3 +17,5 @@ int _setenv(           /* man setenv(3) */
 
 char *_unsetenv(       /* man unsetenv(3) */
 	const char *name);
+
+#endif /* _ENV_UTILS_ */

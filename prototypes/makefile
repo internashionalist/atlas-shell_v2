@@ -8,49 +8,52 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 
 .DELETE_ON_ERROR:
 
-.PHONY: clean 
+.PHONY: clean
 
 
-all: pid ppid noargc readline splitter execve forker wait five simpsh
+all: pid ppid noargc readline splitter execve forker wait five simpsh which
 
-pid: 
-	${CCMD} pid.c -o pid.exec 
+pid:
+	${CCMD} pid.c -o pid.exec
 
-ppid: 
-	${CCMD} ppid.c -o ppid.exec 
+ppid:
+	${CCMD} ppid.c -o ppid.exec
 
-noargc: 
-	${CCMD} noargc.c -o noargc.exec 
+noargc:
+	${CCMD} noargc.c -o noargc.exec
 
-readline: 
-	${CCMD} readline.c -o readline.exec 
+readline:
+	${CCMD} readline.c -o readline.exec
 
-splitter: 
-	${CCMD} splitter.c -o splitter.exec 
+splitter:
+	${CCMD} splitter.c -o splitter.exec
 
-execve: 
-	${CCMD} execve.c -o execve.exec 
+execve:
+	${CCMD} execve.c -o execve.exec
 
-forker: 
-	${CCMD} forker.c -o forker.exec 
+forker:
+	${CCMD} forker.c -o forker.exec
 
-wait: 
-	${CCMD} wait.c -o wait.exec 
+wait:
+	${CCMD} wait.c -o wait.exec
 
-five: 
-	${CCMD} exec5.c -o exec5.exec 
+five:
+	${CCMD} exec5.c -o exec5.exec
 
-stat: 
-	${CCMD} stat.c -o stat.exec 
+stat:
+	${CCMD} stat.c -o stat.exec
 
-envmain: 
-	${CCMD} envmain.c -o envmain.exec 
+envmain:
+	${CCMD} envmain.c -o envmain.exec
 
-environ: 
-	${CCMD} environ.c -o environ.exec 
+environ:
+	${CCMD} environ.c -o environ.exec
 
-simpsh: 
-	${CCMD} simpsh.c -o simpsh.exec 
+which:
+	${CCMD} _which.c -o _which.exec
+
+simpsh:
+	${CCMD} simpsh.c -o simpsh.exec
 
 clean:
 	$(RM) *~ *.exec *.o
