@@ -12,7 +12,7 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 
 
 all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
-	environ which simpsh which
+	environ which simpsh which env-utils
 
 pid:
 	${CCMD} pid.c -o pid.exec
@@ -52,6 +52,9 @@ environ:
 
 which:
 	${CCMD} _which.c -o _which.exec
+
+env-utils:
+	${CCMD} env-utils.main.c chepe-str.c -o env-utils.exec
 
 simpsh:
 	${CCMD} simpsh.c -o simpsh.exec

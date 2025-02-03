@@ -1,21 +1,23 @@
 #ifndef _ENV_UTILS_
 #define _ENV_UTILS_
 
-/*
- * test the address of **env vs that of extern char **environ
- * write a func that prints each dir in the PATH env var
- * write a func that builds a linked list of PATH dirs
- */
+typedef struct _link {
+	char *path;
+	struct _link *prev;
+	struct _link *next;
+} linked_path;
 
-char *_getenv(         /* man getenv(3) */
-	const char *name);
+linked_path *init_path_chain();
 
-int _setenv(           /* man setenv(3) */
-	const char *name,
-	const char *value,
-	int overwrite);
+void print_paths();
 
-char *_unsetenv(       /* man unsetenv(3) */
-	const char *name);
+/* man getenv(3) */
+char *_getenv(const char *name);
+
+/* man setenv(3) */
+int _setenv( const char *name, const char *value, int overwrite);
+
+/* man unsetenv(3) */
+char *_unsetenv( const char *name);
 
 #endif /* _ENV_UTILS_ */
