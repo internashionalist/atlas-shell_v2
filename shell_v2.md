@@ -67,7 +67,7 @@
 #include <sys/stat.h>
 
 	int stat(char *path, struct stat *statbuff);   // __xstat
-	int fstat(int fd, struct stat *statbuff);  // __fxstat
+	int fstat(int fd, struct stat *statbuff);      // __fxstat
 	int lstat(char *path, struct stat *statbuff);  // __lxstat
 
 #include <signal.h>
