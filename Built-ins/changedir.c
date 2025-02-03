@@ -1,8 +1,13 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int change_directory (const char *pathname)
+// Built in for change directory
+int change_directory (const char *pathname, char *old, size_t len)
 {
+
+    if (path) {
+        fprintf("cd $HOME")
+    }
     // self made strlen
     if (path == NULL || my_strlen(path) == 0) 
     {
