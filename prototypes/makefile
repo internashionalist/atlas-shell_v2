@@ -12,7 +12,7 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 
 
 all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
-	environ which simpsh which env-utils
+	environ which simpsh which env-utils getenv setenv unsetenv
 
 pid:
 	${CCMD} pid.c -o pid.exec
@@ -55,6 +55,15 @@ which:
 
 env-utils:
 	${CCMD} env-utils.main.c chepe-str.c -o env-utils.exec
+
+getenv:
+	${CCMD} _getenv.main.c env_utils.c chepe-str.c -o _getenv.exec
+
+setenv:
+	${CCMD} _setenv.main.c path_utils.c env_utils.c chepe-str.c -o _setenv.exec
+
+unsetenv:
+	${CCMD} _unsetenv.main.c path_utils.c env_utils.c chepe-str.c -o _unsetenv.exec
 
 simpsh:
 	${CCMD} simpsh.c -o simpsh.exec

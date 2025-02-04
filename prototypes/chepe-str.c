@@ -77,7 +77,7 @@ char *str_concat(char *pre, char *post)
 	concat = malloc(sizeof(concat) * (a + b));
 	str_paste(&concat, pre);
 
-	tail = &concat[a + 1];
+	tail = &concat[a];
 	str_paste(&tail, post);
 
 	return (concat);
