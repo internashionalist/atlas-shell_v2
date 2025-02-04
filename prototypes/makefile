@@ -57,13 +57,13 @@ env-utils:
 	${CCMD} env-utils.main.c chepe-str.c -o env-utils.exec
 
 getenv:
-	${CCMD} _getenv.c env_utils.c chepe-str.c -o _getenv.exec
+	${CCMD} _getenv.main.c env_utils.c chepe-str.c -o _getenv.exec
 
 setenv:
-	${CCMD} _setenv.c chepe-str.c -o _setenv.exec
+	${CCMD} _setenv.main.c chepe-str.c -o _setenv.exec
 
 unsetenv:
-	${CCMD} _unsetenv.c env_utils.c chepe-str.c -o _unsetenv.exec
+	${CCMD} _unsetenv.main.c path_utils.c env_utils.c chepe-str.c -o _unsetenv.exec
 
 simpsh:
 	${CCMD} simpsh.c -o simpsh.exec
