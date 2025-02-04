@@ -12,6 +12,7 @@ typedef struct _link {
 linked_path *init_path_chain();
 
 void print_paths();
+void _print_env();
 
 /* man getenv(3) */
 char *_getenv(const char *name);

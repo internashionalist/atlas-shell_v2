@@ -3,6 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void _print_env()
+{
+	int i = 0;
+	while (environ[i] != NULL)
+	{
+		printf("[%d] %s\n", i, environ[i]);
+		i++;
+	}
+}
+
 int _getenvid(const char *name)
 {
 	int len = 0, index = 0;
