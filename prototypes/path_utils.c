@@ -104,42 +104,20 @@ void print_paths()
 	} while (path);
 }
 
-int comp_addr(void **alpha, void **beta)
-{
-	printf("%p ?= %p", alpha, beta);
+/* int comp_addr(void **alpha, void **beta) */
+/* { */
+/* 	printf("%p ?= %p", alpha, beta); */
 
-	if (alpha == beta)
-		return (0);
+/* 	if (alpha == beta) */
+/* 		return (0); */
 
-	return (-1);
-}
+/* 	return (-1); */
+/* } */
 
-void env_environ_are_the_same(char **env)
-{
-	if (comp_addr((void **) env, (void **) environ) < 0)
-		printf(" are not the same\n");
-	else
-		printf(" are equal\n");
-}
-
-/* function tester */
-int main(int argc, char **argv, char **env)
-{
-	(void) argc;
-	(void) argv;
-	(void) env;
-
-	linked_path *head = init_path_chain();
-	linked_path *node;
-
-	/* print_paths(); */
-
-	node = nav_path_chain(head);
-	do {
-		printf("%s\n", node->path);
-	} while ((node = nav_path_chain(NULL)));
-
-	erase_path_chain(head);
-
-	return (0);
-}
+/* void env_environ_are_the_same(char **env) */
+/* { */
+/* 	if (comp_addr((void **) env, (void **) environ) < 0) */
+/* 		printf(" are not the same\n"); */
+/* 	else */
+/* 		printf(" are equal\n"); */
+/* } */

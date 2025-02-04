@@ -1,6 +1,8 @@
 #ifndef _ENV_UTILS_
 #define _ENV_UTILS_
 
+extern char **environ;
+
 typedef struct _link {
 	char *path;
 	struct _link *prev;
