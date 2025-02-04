@@ -20,6 +20,6 @@ char *_getenv(const char *name);
 int _setenv( const char *name, const char *value, int overwrite);
 
 /* man unsetenv(3) */
-char *_unsetenv( const char *name);
+int _unsetenv( const char *name);
 
 #endif /* _ENV_UTILS_ */

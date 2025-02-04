@@ -62,6 +62,9 @@ getenv:
 setenv:
 	${CCMD} _setenv.c chepe-str.c -o _setenv.exec
 
+unsetenv:
+	${CCMD} _unsetenv.c env_utils.c chepe-str.c -o _unsetenv.exec
+
 simpsh:
 	${CCMD} simpsh.c -o simpsh.exec
 

@@ -4,7 +4,7 @@
 
 int main(int c, char **argv)
 {
-	char *value, *test;
+	char *value;
 
 	if (c < 2)
 		return (1);
@@ -12,9 +12,7 @@ int main(int c, char **argv)
 		for (int i = 1; i < c; i++)
 		{
 			value = _getenv(argv[i]);
-			test = getenv(argv[i]);
-			printf("%s :\n\t_getenv: %s\n", argv[i], value);
-			printf("\n\tgetenv:  %s\n", test);
+			printf("%s:\n\t_getenv: %s\n", argv[i], value);
 		}
 	return (0);
 }
