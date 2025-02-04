@@ -4,15 +4,16 @@
 
 int main(int c, char **argv)
 {
-	char *value;
+	(void) c;
+	(void) argv;
 
-	if (c < 2)
-		return (1);
-	else
-		for (int i = 1; i < c; i++)
-		{
-			value = _getenv(argv[i]);
-			printf("%s :\n\t_getenv%s\n", argv[i], value);
-		}
+	if ( c < 3)
+		return(1);
+
+	stash_env(environ);
+	_setenv(argv[1], argv[2], 1);
+	_print_env();
+	/* reset_env(); */
+
 	return (0);
 }

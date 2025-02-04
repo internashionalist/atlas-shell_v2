@@ -11,6 +11,8 @@ typedef struct _link {
 
 linked_path *init_path_chain();
 
+char **stash_env(char **env);
+char **reset_env();
 void print_paths();
 void _print_env();
 

@@ -60,7 +60,7 @@ getenv:
 	${CCMD} _getenv.main.c env_utils.c chepe-str.c -o _getenv.exec
 
 setenv:
-	${CCMD} _setenv.main.c chepe-str.c -o _setenv.exec
+	${CCMD} _setenv.main.c path_utils.c env_utils.c chepe-str.c -o _setenv.exec
 
 unsetenv:
 	${CCMD} _unsetenv.main.c path_utils.c env_utils.c chepe-str.c -o _unsetenv.exec
