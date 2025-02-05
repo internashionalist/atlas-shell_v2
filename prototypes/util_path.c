@@ -1,5 +1,6 @@
 #include "util_str.h"
 #include "util_path.h"
+#include "util_env.h"
 #include <stdio.h>
 #include <stdlib.h>
 
