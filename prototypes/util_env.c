@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+/******** INTERNAL ********/
+
 char *compose_varval(char *var, char *val)
 {
 	char *var_eq = str_concat(var, "=");
@@ -33,27 +36,6 @@ char **stash_env(char **env)
 	return stash;
 }
 
-void init_env(void)
-{
-	static char **local_env = NULL;
-	char *varval = NULL;
-	int len = env_length();
-
-	if (!local_env)
-	{
-		local_env = malloc(sizeof(char **) * (len + 1));
-
-		for (int v = 0; v < len; v++)
-		{
-			varval = str_dup(environ[v]);
-			local_env[v] = varval;
-		}
-		local_env[len] = NULL;
-		stash_env(environ);
-		environ = local_env;
-	}
-}
-
 char **extend_env(char **env, int add)
 {
 	int len = 0;
@@ -80,27 +62,6 @@ void wipe_env(char **env)
 		v++;
 	}
 	free(env);
-}
-
-char **reset_env()
-{
-	char **old = environ;
-
-	environ = stash_env(NULL);
-
-	wipe_env(old);
-
-	return (environ);
-}
-
-void _print_env()
-{
-	int i = 0;
-	while (environ[i] != NULL)
-	{
-		printf("[%d] %s\n", i, environ[i]);
-		i++;
-	}
 }
 
 int _getenvid(const char *name)
@@ -140,6 +101,60 @@ char *_getenvp(const char *name)
 	return (envp);
 }
 
+void append_env(char *varval)
+{
+	char **old_env = environ;
+	int len = env_length();
+
+	environ = extend_env(environ, 1);
+	free(old_env);
+	environ[len] = varval;
+}
+
+/******** EXPOSED ********/
+
+char **reset_env()
+{
+	char **old = environ;
+
+	environ = stash_env(NULL);
+
+	wipe_env(old);
+
+	return (environ);
+}
+
+void init_env(void)
+{
+	static char **local_env = NULL;
+	char *varval = NULL;
+	int len = env_length();
+
+	if (!local_env)
+	{
+		local_env = malloc(sizeof(char **) * (len + 1));
+
+		for (int v = 0; v < len; v++)
+		{
+			varval = str_dup(environ[v]);
+			local_env[v] = varval;
+		}
+		local_env[len] = NULL;
+		stash_env(environ);
+		environ = local_env;
+	}
+}
+
+void print_env()
+{
+	int i = 0;
+	while (environ[i] != NULL)
+	{
+		printf("[%d] %s\n", i, environ[i]);
+		i++;
+	}
+}
+
 char *_getenv(const char *name)
 {
 	char *value = _getenvp(name);
@@ -155,6 +170,23 @@ char *_getenv(const char *name)
 	return (value);
 }
 
+int _setenv(const char *var, const char *val, int overwrite)
+{
+	char *varval;
+	int i = _getenvid(var);
+
+	varval = compose_varval((char *) var, (char *) val);
+	if (i < 0)
+		append_env(varval);
+	else if (overwrite)
+	{
+		free(environ[i]);
+		environ[i] = varval;
+	}
+
+	return (0);
+}
+
 int _unsetenv(const char *name)
 {
 	int last = 0;
@@ -168,33 +200,6 @@ int _unsetenv(const char *name)
 	{
 		environ[index] = environ[last];
 		environ[last] = NULL;
-	}
-
-	return (0);
-}
-
-void append_env(char *varval)
-{
-	char **old_env = environ;
-	int len = env_length();
-
-	environ = extend_env(environ, 1);
-	free(old_env);
-	environ[len] = varval;
-}
-
-int _setenv(const char *var, const char *val, int overwrite)
-{
-	char *varval;
-	int i = _getenvid(var);
-
-	varval = compose_varval((char *) var, (char *) val);
-	if (i < 0)
-		append_env(varval);
-	else if (overwrite)
-	{
-		free(environ[i]);
-		environ[i] = varval;
 	}
 
 	return (0);

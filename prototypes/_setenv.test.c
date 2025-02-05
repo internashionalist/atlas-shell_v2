@@ -11,12 +11,12 @@ int main(int c, char **argv)
 		return(1);
 
 	init_env();
-	_print_env();
+	print_env();
 	_setenv(argv[1], argv[2], 1);
 	_setenv("FOO", "bar", 1);
 	_setenv("LANGUAGE", "fr", 1);
 	_setenv("LANG", "C", 1);
-	_print_env();
+	print_env();
 	reset_env();
 
 	return (0);
