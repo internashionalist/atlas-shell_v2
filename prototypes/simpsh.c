@@ -4,22 +4,39 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include "util_str.h"
+#include "util_which.h"
+#include "util_env.h"
 
-int process_input(char **strings)
+int process_input(char **input_tokens)
 {
 	int wstatus;
+	char *fullpath;
+
+	fullpath = _which(input_tokens[0]);
+
+	if (!fullpath)
+	{
+		free(fullpath);
+		return(-1);
+	}
+	else
+	{
+		input_tokens[0] = fullpath;
+	}
 
 	switch (fork())
 	{
 		case -1:
 			return (-1);
 		case 0:
-			if (execve(strings[0], strings, NULL) == -1)
+			if (execve(input_tokens[0], input_tokens, environ) == -1)
 				return (-1);
 			break;
 		default:
 			wait(&wstatus);
 	}
+
+	free(fullpath);
 	return (wstatus);
 }
 
@@ -28,6 +45,8 @@ int main(void)
 	char *inputline = NULL;
 	char **input_tokens = NULL;
 	size_t input_len = 0;
+
+	init_env();
 
 	while (1)
 	{
@@ -47,6 +66,8 @@ int main(void)
 			free(input_tokens);
 		}
 	}
+
+	reset_env();
 
 	free(inputline);
 

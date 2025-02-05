@@ -82,6 +82,7 @@ char *_which(char *basename)
 	int p = 0;
 
 	pathenv = _getenv("PATH");
+	pathenv = str_dup(pathenv);
 	paths = tokenize(pathenv, "=:", 64);
 
 	while (paths[p] != NULL)
@@ -93,7 +94,10 @@ char *_which(char *basename)
 			break;
 		}
 		free(fullpath);
+		p++;
 	}
 
+	free(paths);
+	free(pathenv);
 	return (mailback);
 }
