@@ -18,6 +18,9 @@ all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
 redir-file:
 	${CCMD} redir-file.exr.c -o redir-file.exec
 
+redir-append:
+	${CCMD} redir-append.exr.c -o redir-append.exec
+
 pid:
 	${CCMD} pid.exr.c -o pid.exec
 
