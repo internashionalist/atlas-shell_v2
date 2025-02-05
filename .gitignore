@@ -1,17 +1,33 @@
+######## documentation
+
 # *.doc
 # *.doc.*
 # *.man
 # *.ref
 # *.ref.*
-*.err
-*.error
-*.exec
+
+######## force ignore
+
 *.ignore
 *.ignore.*
-*.log
+
+######## generated files
+
+*.exec
 *.o
-*.out
-*.test
-*.test.*
 *~
-test-*
+
+######## output analysis
+
+*.check
+*.check.*
+*.err
+*.error
+*.log
+*.out
+
+######## unit testing
+
+# *.test.* 
+*.cunit.*
+*.test
