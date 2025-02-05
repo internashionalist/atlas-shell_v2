@@ -3,41 +3,40 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include "util_str.h"
+#include "util_which.h"
+#include "util_env.h"
 
-char **tokenize(char *inputline)
-{
-	int max_tokens = 2024;
-	char *delims = " \n";
-	char **tokens = malloc(sizeof(void *) * max_tokens);
-	char *tok = strtok(inputline, delims);
-
-	int i = 0;
-	do {
-		tokens[i] = tok;
-		tok = strtok(NULL, delims);
-	} while ((++i < max_tokens) && (tok != NULL));
-
-	tokens[i] = NULL;
-
-	free(tok);
-	return (tokens);
-}
-
-int process_input(char **strings)
+int process_input(char **input_tokens)
 {
 	int wstatus;
+	char *fullpath;
+
+	fullpath = _which(input_tokens[0]);
+
+	if (!fullpath)
+	{
+		free(fullpath);
+		return(-1);
+	}
+	else
+	{
+		input_tokens[0] = fullpath;
+	}
 
 	switch (fork())
 	{
 		case -1:
 			return (-1);
 		case 0:
-			if (execve(strings[0], strings, NULL) == -1)
+			if (execve(input_tokens[0], input_tokens, environ) == -1)
 				return (-1);
 			break;
 		default:
 			wait(&wstatus);
 	}
+
+	free(fullpath);
 	return (wstatus);
 }
 
@@ -47,21 +46,28 @@ int main(void)
 	char **input_tokens = NULL;
 	size_t input_len = 0;
 
+	init_env();
+
 	while (1)
 	{
 		printf("$ ");
 
 		if (getline(&inputline, &input_len, stdin) == -1)
 			continue;
+
 		if (!strcmp(inputline, "exit\n"))
+		{
 			break;
+		}
 		else
 		{
-			input_tokens = tokenize(inputline);
+			input_tokens = tokenize(inputline, " \n", 1024);
 			process_input(input_tokens);
 			free(input_tokens);
 		}
 	}
+
+	reset_env();
 
 	free(inputline);
 
