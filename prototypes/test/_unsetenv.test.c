@@ -10,7 +10,7 @@ int main(int c, char **argv)
 		return (1);
 	else
 	{
-		_print_env();
+		print_env();
 		for (int i = 1; i < c; i++)
 		{
 			value = _getenv(argv[i]);
@@ -21,7 +21,7 @@ int main(int c, char **argv)
 			value = _getenv(argv[i]);
 			printf("\t%s\n", value);
 		}
-		_print_env();
+		print_env();
 	}
 
 	return (0);

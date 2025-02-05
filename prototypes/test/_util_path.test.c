@@ -1,5 +1,6 @@
-#include "chepe-str.h"
-#include "env-utils.h"
+#include "util_str.h"
+#include "util_env.h"
+#include "util_path.h"
 #include <stdio.h>
 #include <stdlib.h>
 
