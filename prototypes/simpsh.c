@@ -3,25 +3,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
-char **tokenize(char *inputline)
-{
-	int max_tokens = 2024;
-	char *delims = " \n";
-	char **tokens = malloc(sizeof(void *) * max_tokens);
-	char *tok = strtok(inputline, delims);
-
-	int i = 0;
-	do {
-		tokens[i] = tok;
-		tok = strtok(NULL, delims);
-	} while ((++i < max_tokens) && (tok != NULL));
-
-	tokens[i] = NULL;
-
-	free(tok);
-	return (tokens);
-}
+#include "util_str.h"
 
 int process_input(char **strings)
 {
@@ -53,11 +35,14 @@ int main(void)
 
 		if (getline(&inputline, &input_len, stdin) == -1)
 			continue;
+
 		if (!strcmp(inputline, "exit\n"))
+		{
 			break;
+		}
 		else
 		{
-			input_tokens = tokenize(inputline);
+			input_tokens = tokenize(inputline, " \n", 1024);
 			process_input(input_tokens);
 			free(input_tokens);
 		}

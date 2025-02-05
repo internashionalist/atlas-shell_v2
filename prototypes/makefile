@@ -52,22 +52,22 @@ environ:
 	${CCMD} environ.c -o environ.exec
 
 which:
-	${CCMD} _which.c -o _which.exec
+	${CCMD} _which.c ${UTILS} -o _which.exec
 
 env-utils:
-	${CCMD} env-utils.main.c chepe-str.c -o env-utils.exec
+	${CCMD} test/env-utils.test.c chepe-str.c -o env-utils.exec
 
 getenv:
-	${CCMD} _getenv.test.c env_utils.c chepe-str.c -o _getenv.exec
+	${CCMD} test/_getenv.test.c env_utils.c chepe-str.c -o _getenv.exec
 
 setenv:
-	${CCMD} _setenv.test.c ${UTILS} -o _setenv.exec
+	${CCMD} test/_setenv.test.c ${UTILS} -o _setenv.exec
 
 unsetenv:
-	${CCMD} _unsetenv.test.c ${UTILS} -o _unsetenv.exec
+	${CCMD} test/_unsetenv.test.c ${UTILS} -o _unsetenv.exec
 
 simpsh:
-	${CCMD} simpsh.c -o simpsh.exec
+	${CCMD} simpsh.c ${UTILS} -o simpsh.exec
 
 clean:
 	$(RM) *~ *.exec *.o
