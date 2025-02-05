@@ -15,6 +15,7 @@ char **stash_env(char **env);
 char **reset_env();
 void print_paths();
 void _print_env();
+void init_env(void);
 
 /* man getenv(3) */
 char *_getenv(const char *name);

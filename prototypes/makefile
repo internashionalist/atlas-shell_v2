@@ -1,5 +1,6 @@
 CC = gcc
 
+UTILS = util_*.c
 CFLAGS = -Wall -Werror -Wextra -ggdb3
 # I_FLAGS = $(shell pkg-config --cflags gtk4)
 # L_FLAGS = $(shell pkg-config --libs gtk4)
@@ -57,13 +58,13 @@ env-utils:
 	${CCMD} env-utils.main.c chepe-str.c -o env-utils.exec
 
 getenv:
-	${CCMD} _getenv.main.c env_utils.c chepe-str.c -o _getenv.exec
+	${CCMD} _getenv.test.c env_utils.c chepe-str.c -o _getenv.exec
 
 setenv:
-	${CCMD} _setenv.main.c path_utils.c env_utils.c chepe-str.c -o _setenv.exec
+	${CCMD} _setenv.test.c ${UTILS} -o _setenv.exec
 
 unsetenv:
-	${CCMD} _unsetenv.test.c util_path.c util_env.c util_str.c -o _unsetenv.exec
+	${CCMD} _unsetenv.test.c ${UTILS} -o _unsetenv.exec
 
 simpsh:
 	${CCMD} simpsh.c -o simpsh.exec
