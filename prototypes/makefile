@@ -63,7 +63,7 @@ setenv:
 	${CCMD} _setenv.main.c path_utils.c env_utils.c chepe-str.c -o _setenv.exec
 
 unsetenv:
-	${CCMD} _unsetenv.main.c path_utils.c env_utils.c chepe-str.c -o _unsetenv.exec
+	${CCMD} _unsetenv.test.c util_path.c util_env.c util_str.c -o _unsetenv.exec
 
 simpsh:
 	${CCMD} simpsh.c -o simpsh.exec

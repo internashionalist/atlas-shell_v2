@@ -104,15 +104,15 @@ void print_paths()
 	} while (path);
 }
 
-/* int comp_addr(void **alpha, void **beta) */
-/* { */
-/* 	printf("%p ?= %p", alpha, beta); */
+int comp_addr(void **alpha, void **beta)
+{
+	printf("%p ?= %p", alpha, beta);
 
-/* 	if (alpha == beta) */
-/* 		return (0); */
+	if (alpha == beta)
+		return (0);
 
-/* 	return (-1); */
-/* } */
+	return (-1);
+}
 
 /* void env_environ_are_the_same(char **env) */
 /* { */
