@@ -109,7 +109,6 @@
 ### libcalls
 
 ```c
-
 /* libraries can hold both syscalls and non-syscalls 🌠 tmyk */
 
 #include <signal.h>
@@ -156,14 +155,12 @@
 #include <pwd.h>
 
 	struct passwd *getpwuid(uid_t uid);
-
 ```
+
 ### indeterminate
 
 ```c
-
 int *__errno_location(void); /* errno macros ? */
-
 ```
 
 ## Compilation
