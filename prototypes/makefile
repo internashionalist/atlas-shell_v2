@@ -15,6 +15,18 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
 	environ which simpsh which env-utils getenv setenv unsetenv
 
+pipe-lsrev:
+	${CCMD} pipe-lsrev.c -o pipe-lsrev.exec
+
+pipe-rev:
+	${CCMD} pipe-rev.c -o pipe-rev.exec
+
+pipe-echo:
+	${CCMD} pipe-echo.exr.c -o pipe-echo.exec
+
+redir-input:
+	${CCMD} redir-input.exr.c -o redir-input.exec
+
 redir-file:
 	${CCMD} redir-file.exr.c -o redir-file.exec
 

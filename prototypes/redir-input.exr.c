@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <wait.h>
 #include <sys/stat.h> /* file mode_t defs */
-
 
 int main(int c, char **args)
 {
-	int fdesc;
+	int fdesc, fork_pid, wstatus;
 	int fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP; /* rw-rw---- */
 	int fflags = O_CREAT | O_APPEND | O_WRONLY;
 
@@ -20,12 +20,21 @@ int main(int c, char **args)
 	if (fdesc < 0)
 		return (errno);
 
-	if (dup2(fdesc, STDOUT_FILENO) < 0)
-		return(errno);
+	char *cmd[] = {"/usr/bin/rev", args[1], NULL};
 
-	printf("if successful, a new file with this should've been created\n");
-	printf("testing what happens in subsequent calls to stdout\n");
-	printf("testing...\n");
+	fork_pid = fork();
+	switch (fork_pid)
+	{
+		case -1:
+			perror("fork failure: ");
+			return (1);
+		case 0:
+			if (execve(cmd[0], cmd, NULL) == -1)
+				perror("execve failure: ");
+			break;
+		default:
+			wait(&wstatus);
+	}
 
 	close(fdesc);
 
