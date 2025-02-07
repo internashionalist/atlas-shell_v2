@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "str_helpers.h"
 
 size_t my_strlen(const char *str) {
     size_t len = 0;

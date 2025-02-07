@@ -16,10 +16,10 @@ int tokenize_input(char *input, char ***tokens)
 	*tokens = malloc(TOK_SIZE * sizeof(char *));
 	if (*tokens == NULL)
 		return (-1);
-	token = _strtok(input, DELIM); /* _strtok ? also need to define DELIM in .h */
+	token = strtok(input, DELIM);
 	while (token != NULL)
 	{
-		(*tokens)[token_counter] = _strdup(token); /* _strdup ? */
+		(*tokens)[token_counter] = _strdup(token);
 		if ((*tokens)[token_counter] == NULL)
 		{
 			for (i = 0; i < token_counter; i++)
@@ -31,5 +31,6 @@ int tokenize_input(char *input, char ***tokens)
 		token = strtok(NULL, DELIM);
 	}
 	(*tokens)[token_counter] = NULL;
+
 	return (token_counter);
 	}
