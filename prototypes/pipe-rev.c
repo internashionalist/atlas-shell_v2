@@ -31,10 +31,10 @@ int main()
 	if (parent < 0)
 		exit(EBADFD);
 
-	if (!parent)
+	if (parent)
 	{
 		close(pipefd[READ_END]);
-		dup2(STDOUT_FILENO, pipefd[WRITE_END]);
+		dup2(pipefd[WRITE_END], STDOUT_FILENO);
 		wait(NULL);
 		close(pipefd[WRITE_END]);
 		exit(EXIT_SUCCESS);

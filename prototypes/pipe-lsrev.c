@@ -5,65 +5,48 @@
 #include <string.h>
 #include <errno.h>
 
-#define READ_END 0
-#define WRITE_END 1
+#define OUT_END 0
+#define IN_END 1
 
-int main(int c, char **args)
+extern char **environ;
+
+int main(void)
 {
 	int pipefd[2];
-	pid_t parent;
-	char buf;
+	char *rev_cmd[] = {"/usr/bin/rev", NULL};
+	char *ls_cmd[] = {"/usr/bin/ls", "-l", ".", NULL};
 
 	/*
-	 * create pipe
-	 *
-	 * use dup2 to
-	 *     redirect the output of the first command
-	 *     into the write end of the pipe
-	 *
-	 *     redirect the read end of the pipe
-	 *     into the input of the second command
-	 */
-
-	/*
-	 * exercise 4: command to command
-	 *
-	 * simulate ls | rev
-	 *
-	 * use fork, execve, dup2, and pipe
+	 * exercise 4: pipe ls to rev
+	 *     simulate: 'ls | rev'
+	 *     fork, execve, dup2, and pipe
 	 *
 	 * execve /bin/ls in a forked process
 	 * execve /usr/bin/rev in another forked proc
-	 *
-	 * pipe ls to rev
 	 *
 	 * consult man 2 pipe
 	 * note: it's safer to close the write-end of a pipe
 	 */
 
-	if (c < 2)
-		exit(EINVAL);
-	if (pipe(pipefd) < 0)
-		exit(EPIPE);
+	/*
+	 * make the program that receives data, the parent of
+	 * the program that outputs data
+	 */
+	if (fork() == 0)
+	{
+		pipe(pipefd);
 
-	parent = fork();
-	if (parent < 0)
-		exit(EBADFD);
-	if (!parent)
-	{
-		close(pipefd[READ_END]);
-		write(pipefd[WRITE_END], args[1], strlen(args[1]));
-		close(pipefd[WRITE_END]);
-		wait(NULL);
-		exit(EXIT_SUCCESS);
+		if (fork() == 0)
+		{
+			close(pipefd[OUT_END]);
+			dup2(pipefd[IN_END], STDOUT_FILENO);
+			execve(ls_cmd[0], ls_cmd, NULL);
+		}
+		close(pipefd[IN_END]);
+		dup2(pipefd[OUT_END], STDIN_FILENO); /* logic of this pisses me off */
+		execve(rev_cmd[0], rev_cmd, NULL);
 	}
-	else
-	{
-		close(pipefd[WRITE_END]);
-		while(read(pipefd[READ_END], &buf, 1) > 0 )
-			write(STDOUT_FILENO,&buf, 1);
-		write(STDOUT_FILENO,"\n", 1);
-		close(pipefd[READ_END]);
-		_exit(EXIT_SUCCESS);
-	}
+
+	wait(NULL);
+	exit(EXIT_SUCCESS);
 }
