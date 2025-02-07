@@ -9,6 +9,7 @@ typedef struct _link {
 	struct _link *next;
 } linked_path;
 
+int is_pathed(char *cmdpath);
 char *navigate_path();
 void print_paths();
 

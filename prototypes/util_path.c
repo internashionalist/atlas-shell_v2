@@ -6,6 +6,19 @@
 
 /******** BASIC PATH HANDLING ********/
 
+int is_pathed(char *cmdpath)
+{
+	switch (cmdpath[0])
+	{
+		case '.':
+			return 1;
+		case '/':
+			return 1;
+		default:
+			return 0;
+	}
+}
+
 char *navigate_path()
 {
 	static int p = 0;
