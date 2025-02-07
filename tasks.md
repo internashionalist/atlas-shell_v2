@@ -61,7 +61,7 @@ implement the following:
 	- usage: `command > output_file`
 	- you don't have to handle the `> output_file command` syntax
 
-## 4. ¯\_(ツ)_/¯
+## 4. ¯\\\_(ツ)\_\/¯
 
 ## 5. hsh 1.2 (7pts)
 
