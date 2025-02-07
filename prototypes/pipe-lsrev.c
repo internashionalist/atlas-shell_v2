@@ -19,13 +19,19 @@ int main(void)
 	/*
 	 * exercise 4: pipe ls to rev
 	 *     simulate: 'ls | rev'
-	 *     fork, execve, dup2, and pipe
+	 *
+	 * fork, execve, dup2, and pipe
 	 *
 	 * execve /bin/ls in a forked process
 	 * execve /usr/bin/rev in another forked proc
 	 *
-	 * consult man 2 pipe
 	 * note: it's safer to close the write-end of a pipe
+	 */
+
+	/*
+	 * note: because the returns of the function calls are not handled this
+	 * code is unsafe. to implement it, be sure to add checks on all the
+	 * appripriate return values
 	 */
 
 	/*
@@ -43,7 +49,7 @@ int main(void)
 			execve(ls_cmd[0], ls_cmd, NULL);
 		}
 		close(pipefd[IN_END]);
-		dup2(pipefd[OUT_END], STDIN_FILENO); /* logic of this pisses me off */
+		dup2(pipefd[OUT_END], STDIN_FILENO);
 		execve(rev_cmd[0], rev_cmd, NULL);
 	}
 
