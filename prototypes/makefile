@@ -15,6 +15,12 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
 	environ which simpsh which env-utils getenv setenv unsetenv
 
+pipe-stack:
+	${CCMD} pipe-stacking.c -o stacker.exec
+
+piper:
+	${CCMD} piper.c ${UTILS} -o piper.exec
+
 pipe-lsrev:
 	${CCMD} pipe-lsrev.c -o pipe-lsrev.exec
 
