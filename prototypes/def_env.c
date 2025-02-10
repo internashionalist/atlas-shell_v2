@@ -71,8 +71,7 @@ int _getenvid(const char *name)
 
 	name_eq = str_concat((char *) name, "=");
 
-	while (name_eq[len] != '\0')
-		len++;
+	len = str_len(name_eq);
 
 	while (environ[index] != NULL)
 	{

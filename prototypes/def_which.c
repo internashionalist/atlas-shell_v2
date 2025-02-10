@@ -32,21 +32,16 @@ char *build_fullpath(char *dirname, char *filename)
 {
 	int a = 0, b = 0;
 	char *concat;
-	char *tail;
+	char *fslash = "/";
 
-	while (dirname[a] != '\0')
-		a++;
-	while (filename[b] != '\0')
-		b++;
+	a = str_len(dirname);
+	b = str_len(filename);
 
-	concat = malloc(sizeof(concat) * (a + b + 1));
+	concat = malloc(sizeof(concat) * (a + b + 2));
+
 	str_paste(&concat, dirname);
-
-	tail = &concat[a];
-	str_paste(&tail, "/");
-
-	tail = &concat[a + 1];
-	str_paste(&tail, filename);
+	str_concat(concat, fslash);
+	str_concat(concat, filename);
 
 	return (concat);
 }
@@ -76,10 +71,27 @@ int analyze_paths(char **paths, char *filename)
 	return (err);
 }
 
+int is_pathed(char *cmdpath)
+{
+	switch (cmdpath[0])
+	{
+		case '.':
+			return 1;
+		case '/':
+			return 1;
+		default:
+			return 0;
+	}
+}
+
 char *_which(char *basename)
 {
 	char **paths, *fullpath, *pathenv, *mailback = NULL;
 	int p = 0;
+
+
+	if (is_pathed(basename))
+		return (str_dup(basename));
 
 	pathenv = _getenv("PATH");
 	pathenv = str_dup(pathenv);
