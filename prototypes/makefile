@@ -27,11 +27,11 @@ pipe-stack:
 piper:
 	${CCMD} piper.c ${UTILS} -o piper.exec
 
+lsrev:
+	${CCMD} pipe-lsrev.c -o lsrev.exec
+
 lsrevwc:
 	${CCMD} pipe-lsrevwc.c -o lsrevwc.exec
-
-pipe-rev:
-	${CCMD} pipe-rev.c -o pipe-rev.exec
 
 pipe-echo:
 	${CCMD} pipe-echo.exr.c -o pipe-echo.exec

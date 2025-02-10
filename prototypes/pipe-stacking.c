@@ -7,8 +7,9 @@
 
 int main(void)
 {
-	int len = 13;
-	char *read_text, *write_text = "hello_world\n";
+	/* int len = 13; */
+	/* char *read_text; */
+	char *write_text = "HELLO_world\n";
 	int reader_a[2], reader_b[2], reader_c[2], reader_d[2];
 	int writer_a[2], writer_b[2], writer_c[2], writer_d[2];
 	int linker_z[2];
@@ -31,6 +32,7 @@ int main(void)
 	 * the order of dup2 calls matter
 	 * setting up the write end
 	 */
+	dup2(STDOUT_FILENO, linker_z[WRITE_END]);
 	dup2(linker_z[WRITE_END], writer_d[WRITE_END]);
 	dup2(writer_d[WRITE_END], writer_c[WRITE_END]);
 	dup2(writer_c[WRITE_END], writer_b[WRITE_END]);
@@ -64,10 +66,10 @@ int main(void)
 	close(writer_a[READ_END]);
 
 	/* testing pipe chain */
-	read_text = malloc(sizeof(char) * len);
+	/* read_text = malloc(sizeof(char) * len); */
 	write(writer_a[WRITE_END], write_text, 13);
-	read(reader_d[READ_END], read_text, 13);
-	printf("test %s", read_text);
+	/* read(reader_d[READ_END], read_text, 13); */
+	/* printf("test %s", read_text); */
 
 	exit(EXIT_SUCCESS);
 }
