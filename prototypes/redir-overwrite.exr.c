@@ -5,6 +5,9 @@
 #include <errno.h>
 #include <sys/stat.h> /* file mode_t defs */
 
+/*
+ * open/create filename, redirect stdout to it in overwrite mode
+ */
 
 int main(int c, char **args)
 {

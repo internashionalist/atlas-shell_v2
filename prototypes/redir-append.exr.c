@@ -6,6 +6,10 @@
 #include <sys/stat.h> /* file mode_t defs */
 
 
+/*
+ * create/open filename given and redirect stdout to it in append mode
+ */
+
 int main(int c, char **args)
 {
 	int fdesc;
