@@ -46,7 +46,19 @@ int check_sep_str(char *string, int pos)
 	}
 }
 
-char **cmd_separator(char *cmdstr, int **partitions)
+char **io_serializer(char *cmdstr, int **partitions)
+{
+	(void) cmdstr;
+	(void) partitions;
+
+	return (NULL);
+}
+
+/*
+ * splits a string along the ;, |, ||, and && characters
+ */
+
+char **cmd_serialiser(char *cmdstr, int **partitions)
 {
 	char **cmds = malloc(sizeof(void *) * 1024);
 	char *delims = ";|&";

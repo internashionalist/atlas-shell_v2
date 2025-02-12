@@ -15,6 +15,9 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
 all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
 	environ which simpsh which env-utils getenv setenv unsetenv
 
+interpreter:
+	${CCMD} interpreter.test.c -o interpreter.exec
+
 prepipe:
 	${CCMD} pipe-pre.c -o prepipe.exec
 

@@ -80,3 +80,58 @@ char **tokenize(char *text, char *delims, int limit)
 	free(tok);
 	return (tokens);
 }
+
+char *str_ncopy(const char *text, int n)
+{
+	int c = 0;
+	char *copy;
+
+	copy = malloc(sizeof(char) * n + 1);
+
+	while ((c < n) && (text[c] != '\0'))
+	{
+		copy[c] = text[c];
+		c++;
+	}
+
+	copy[c] = '\0';
+
+	return (copy);
+}
+
+char *read_line(char *text, int reset)
+{
+	char *line;
+	static int end = 0;
+	int start = 0, len = 0;
+
+	if ((end == -1) || (reset > 0))
+	{
+		end = 0;
+		return (NULL);
+	}
+
+	start = end + 1;
+	do
+		end++;
+	while (
+		(text[end] != '\0') &&
+		(text[end] != '\n'));
+
+	len = end - start;
+
+	if (text[end] == '\0')
+		end = -1;
+
+	line = str_ncopy(&(text[start]), len + 1);
+
+	return (line);
+}
+
+void mem_init(char **buffer, int size, int value)
+{
+	int index;
+
+	for (index = 0; index < size; index++)
+		(*buffer)[index] = value;
+}
