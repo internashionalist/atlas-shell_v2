@@ -7,7 +7,7 @@
 #include "util_which.h"
 #include "util_env.h"
 
-int process_input(char **input_tokens)
+int process_cmd(char **input_tokens)
 {
 	int wstatus;
 	char *fullpath;
@@ -17,6 +17,7 @@ int process_input(char **input_tokens)
 	if (!fullpath)
 	{
 		free(fullpath);
+		fullpath = NULL;
 		return(-1);
 	}
 	else
@@ -62,7 +63,7 @@ int main(void)
 		else
 		{
 			input_tokens = tokenize(inputline, " \n", 1024);
-			process_input(input_tokens);
+			process_cmd(input_tokens);
 			free(input_tokens);
 		}
 	}
