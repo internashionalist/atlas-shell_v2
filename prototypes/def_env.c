@@ -69,7 +69,7 @@ int _getenvid(const char *name)
 	int len = 0, index = 0;
 	char *name_eq;
 
-	name_eq = str_concat((char *) name, "=");
+	name_eq = str_concat(name, "=");
 
 	len = str_len(name_eq);
 

@@ -6,6 +6,20 @@
 
 /******** BASIC PATH HANDLING ********/
 
+int is_pathed(char *cmdpath)
+{
+	switch (cmdpath[0])
+	{
+		case '.':
+			return 1;
+		case '/':
+			return 1;
+		default:
+			return 0;
+	}
+}
+
+
 char *navigate_path()
 {
 	static int p = 0;
@@ -47,63 +61,59 @@ void print_paths()
 	} while (path);
 }
 
-/******** PATH CHAIN ********/
-
-/* comment out section if unneeded */
-
-linked_path *init_path_chain()
+int verify_fullpath(char *fullpath)
 {
-	linked_path
-		*head = malloc(sizeof(linked_path)),
-		*prev = head,
-		*next = NULL;
-	char *path = navigate_path();
+	struct stat st;
 
-	head->path = str_dup(path);
-	head->prev = NULL;
-	head->next = NULL;
-	prev = head;
-
-	while ((path = navigate_path()))
-	{
-		next = malloc(sizeof(linked_path));
-		next->path = str_dup(path);
-		next->prev = prev;
-		next->next = NULL;
-
-		prev->next = next;
-		prev = next;
-	}
-
-	return (head);
+	if (!stat(fullpath, &st))
+		return (1);
+	else
+		return (0);
 }
 
-linked_path *nav_path_chain(linked_path *head)
+int print_fullpath(char *fullpath, struct stat *st)
 {
-	static linked_path *current = NULL;
-	linked_path *returner;
-
-	if (head)
-		current = head;
-	else if (current != NULL)
-		current = current->next;
-
-	returner = current;
-	return (returner);
+	if (stat(fullpath, st) == 0)
+	{
+		printf("%s\n", fullpath);
+		return (0);
+	}
+	else
+		return (-1);
 }
 
-void erase_path_chain(linked_path *head)
+char *build_fullpath(char *dirname, char *filename)
 {
-	linked_path *next = head, *prev;
+	char *dir_slash_file, *dir_slash;
 
-	while (next != NULL)
+	dir_slash = str_concat(dirname, "/");
+	dir_slash_file = str_concat(dir_slash, filename);
+	free(dir_slash);
+
+	return (dir_slash_file);
+}
+
+int analyze_paths(char **paths, char *filename)
+{
+	struct stat st;
+	char *fullpath;
+	int err = 0;
+
+	for (int p = 1; paths[p] != NULL; p++)
 	{
-		free(next->prev);
-		free(next->path);
-
-		prev = next;
-		next = next->next;
+		fullpath = build_fullpath(paths[p], filename);
+		if (print_fullpath(fullpath, &st) < 0)
+		{
+			free(fullpath);
+			err = -1;
+		}
+		else
+		{
+			free(fullpath);
+			err = 0;
+			break;
+		}
 	}
 
-	free(prev);
+	return (err);
 }

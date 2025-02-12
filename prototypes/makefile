@@ -1,6 +1,6 @@
 CC = gcc
 
-UTILS = util_*.c
+UTILS = def_*.c
 CFLAGS = -Wall -Werror -Wextra -ggdb3
 # I_FLAGS = $(shell pkg-config --cflags gtk4)
 # L_FLAGS = $(shell pkg-config --libs gtk4)

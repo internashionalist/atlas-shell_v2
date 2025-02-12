@@ -1,7 +1,9 @@
 #include <sys/wait.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include "util_which.h"
+#include "util_env.h"
 
 #define READ_END 0
 #define WRITE_END  1
@@ -57,6 +59,7 @@ int proc_cmds(char **cmds, int c)
 		close(readin);
 		close(linker[WRITE_END]);
 		readin = linker[READ_END];
+		free(cmd[0]);
 		free(cmd);
 	}
 
@@ -68,7 +71,11 @@ int proc_cmds(char **cmds, int c)
 
 int main(int a, char **args)
 {
+	init_env();
+
 	proc_cmds(&args[1], a - 1);
+
+	reset_env();
 
 	exit(EXIT_SUCCESS);
 }

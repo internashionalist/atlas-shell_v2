@@ -5,17 +5,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int str_len(char *text)
+int str_len(const char *text)
 {
 	int len = 0;
 
 	while (text[len] != '\0')
 		len++;
 
-	return (len + 1);
+	return (len);
 }
 
-void str_paste(char **dest, char *source)
+void str_paste(char **dest, const char *source)
 {
 	int len = str_len(source);
 
@@ -23,7 +23,7 @@ void str_paste(char **dest, char *source)
 		(*dest)[c] = source[c];
 }
 
-char *str_dup(char *source)
+char *str_dup(const char *source)
 {
 	char *duplet;
 	int len = str_len(source);
@@ -34,7 +34,7 @@ char *str_dup(char *source)
 	return (duplet);
 }
 
-char *str_concat(char *prefix, char *suffix)
+char *str_concat(const char *prefix, const char *suffix)
 {
 	int a = 0, b = 0;
 	char *concat, *tail;
@@ -44,7 +44,7 @@ char *str_concat(char *prefix, char *suffix)
 
 	concat = malloc(sizeof(char) * (a + b + 1));
 	str_paste(&concat, prefix);
-	tail = &concat[a];
+	tail = &(concat[a]);
 	str_paste(&tail, suffix);
 
 	return (concat);
@@ -68,8 +68,6 @@ char **tokenize(char *text, char *delims, int limit)
 	char *tok;
 	int i = 0;
 
-	 /* strtok "consumes" strings */
-	text = str_dup(text);
 	tok = strtok(text, delims);
 
 	do {
@@ -79,7 +77,6 @@ char **tokenize(char *text, char *delims, int limit)
 
 	tokens[i] = NULL;
 
-	free(text);
 	free(tok);
 	return (tokens);
 }
