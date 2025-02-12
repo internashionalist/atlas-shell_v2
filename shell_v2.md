@@ -81,7 +81,7 @@
 		struct sigaction *act,
 		struct sigaction oldact);
 
-#include <fctl.h>
+#include <fcntl.h>
 
 	int open(char *path, int flags, ... /* mode_t mode */ );
 
