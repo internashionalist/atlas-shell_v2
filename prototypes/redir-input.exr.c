@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <wait.h>
+#include <signal.h>
 #include <sys/stat.h> /* file mode_t defs */
 
 #define READ_END  0
@@ -16,15 +17,20 @@
 void readwrite(int readin, int writeout, int len)
 {
 	char *buffer = malloc(sizeof(char) * len);
+	int rlen = 0;
 
-	while (read(readin, buffer, len) > 0);
-		write(writeout, buffer, len);
+	do {
+		rlen = read(readin, buffer, len);
+		write(writeout, buffer, rlen);
+	} while (rlen > 0);
+
+	free(buffer);
 }
 
 int main(int c, char **args)
 {
 	char *cmd[] = {"/usr/bin/rev", NULL};
-	int fdesc, subproc, wstatus, pipefd[2], len = 1024;
+	int fdesc, subproc, wstatus, pipefd[2], len = 64;
 
 	if (c < 2)
 		return (EINVAL);
@@ -49,14 +55,13 @@ int main(int c, char **args)
 			break;
 		default:
 			close(pipefd[READ_END]);
+			/* dup2(pipefd[WRITE_END], STDOUT_FILENO); */
+			/* readwrite(fdesc, STDOUT_FILENO, len); */
 			readwrite(fdesc, pipefd[WRITE_END], len);
+			close(fdesc);
 			close(pipefd[WRITE_END]);
 			wait(&wstatus);
 	}
-
-	close(fdesc);
-	close(pipefd[WRITE_END]);
-	close(pipefd[READ_END]);
 
 	return (0);
 }
