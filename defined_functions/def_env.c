@@ -1,3 +1,4 @@
+#include "_util_str.h"
 #include "util_str.h"
 #include "util_env.h"
 #include <stdio.h>
@@ -71,7 +72,7 @@ int _getenvid(const char *name)
 
 	name_eq = str_concat(name, "=");
 
-	len = str_len(name_eq);
+	len = my_strlen(name_eq);
 
 	while (environ[index] != NULL)
 	{
