@@ -59,10 +59,10 @@ int main(void)
 		if (num_read == -1) /* EOF or error */
 			break;
 
-		if (numread > 0 && inputline[numread - 1] == '\n') /* remove \n */
+		if (num_read > 0 && inputline[numread - 1] == '\n') /* remove \n */
 			inputline[numread - 1] = '\0';
 
-		if (_strcmp(inputline, "exit") == 0) /* exit command */
+		if (strcmp(inputline, "exit") == 0) /* exit command */
 			break;
 
 		input_tokens = tokenize(inputline, " \t", 1024); /* tokenize */
