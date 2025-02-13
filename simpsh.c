@@ -7,6 +7,7 @@
 #include "defined_functions/util_which.h"
 #include "defined_functions/util_env.h"
 #include "defined_functions/_util_str.h"
+#include "defined_functions/util_cd.h"
 
 int process_cmd(char **input_tokens)
 {
@@ -47,7 +48,7 @@ int main(void)
 	char *inputline = NULL;
 	char **input_tokens = NULL;
 	size_t input_len = 0;
-	ssize_t num_read;
+	ssize_t n_read;
 
 	init_env();
 
@@ -56,12 +57,12 @@ int main(void)
 		if (isatty(STDIN_FILENO)) /* if interactive mode */
 			printf("$ ");
 
-		num_read = getline(&inputline, &input_len, stdin);
-		if (num_read == -1) /* EOF or error */
+		n_read = getline(&inputline, &input_len, stdin);
+		if (n_read == -1) /* EOF or error */
 			break;
 
-		if (num_read > 0 && inputline[num_read - 1] == '\n') /* remove \n */
-			inputline[num_read - 1] = '\0';
+		if (n_read > 0 && inputline[n_read - 1] == '\n') /* remove \n */
+			inputline[n_read - 1] = '\0';
 
 		if (_strcmp(inputline, "exit") == 0) /* exit command */
 			break;
@@ -73,9 +74,16 @@ int main(void)
 			continue;
 		}
 
-		int status = process_cmd(input_tokens); /* process command */
-		if (status == -1)
-			printf("Command not found: %s\n", input_tokens[0]);
+		if (_strcmp(input_tokens[0], "cd") == 0)
+		{
+			change_dir(input_tokens);
+		}
+		else
+		{
+			int status = process_cmd(input_tokens); /* process command */
+			if (status == -1)
+				printf("Command not found: %s\n", input_tokens[0]);
+		}
 
 		free(input_tokens);
 	}
