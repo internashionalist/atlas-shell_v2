@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "util_str.h"
 
 int main(void)
 {
@@ -10,7 +11,7 @@ int main(void)
 	do {
 		if (input_buf != NULL)
 		{
-			if (!strcmp(input_buf, "exit\n"))
+			if (!_strcmp(input_buf, "exit\n"))
 				break;
 			printf("%s", input_buf);
 		}

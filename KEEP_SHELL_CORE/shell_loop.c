@@ -20,7 +20,7 @@ int shell_loop(info_t *info)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO)) /* if interactive */
-			prompt();
+			prompt("$ ");
 
 		num_read = getline(&line, &len, stdin); /* is this right?? */
 		if (num_read == -1) /* EOF or error */

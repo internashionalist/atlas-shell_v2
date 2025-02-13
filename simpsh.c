@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "util_str.h"
+// #include "util_str.h" is nowhere
 #include "util_which.h"
 #include "util_env.h"
 
