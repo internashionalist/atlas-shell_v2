@@ -6,6 +6,7 @@
 #include "defined_functions/util_str.h"
 #include "defined_functions/util_which.h"
 #include "defined_functions/util_env.h"
+#include "defined_functions/_util_str.h"
 
 int process_cmd(char **input_tokens)
 {
@@ -62,7 +63,7 @@ int main(void)
 		if (num_read > 0 && inputline[num_read - 1] == '\n') /* remove \n */
 			inputline[num_read - 1] = '\0';
 
-		if (strcmp(inputline, "exit") == 0) /* exit command */
+		if (_strcmp(inputline, "exit") == 0) /* exit command */
 			break;
 
 		input_tokens = tokenize(inputline, " \t", 1024); /* tokenize */
