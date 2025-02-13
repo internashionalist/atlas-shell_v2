@@ -1,10 +1,10 @@
-# Shell v2 : Shell Harder 
+# Shell v2 : Shell Harder
 
 ## Contents
 
-[Synopsis](#synopsis)<br>
-[Features](#features)<br>
-[Use Instructions](#use-instructions)<br>
+[Synopsis](#synopsis)  
+[Features](#features)  
+[Use Instructions](#use-instructions)  
 [Authors](#authors)
 
 ## Synopsis
@@ -49,6 +49,6 @@ gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 
 ## Authors
 
-Jose "Chepe" Olmos [@chepeniv](https://github.com/chepeniv)<br>
-AlexAndrea "Ariel" Lopez [@NecroKnightMare](https://github.com/NecroKnightMare)<br>
+Jose "Chepe" Olmos [@chepeniv](https://github.com/chepeniv)  
+AlexAndrea "Ariel" Lopez [@NecroKnightMare](https://github.com/NecroKnightMare)  
 Taylor "Nash" Thames [@internashionalist](https://github.com/internashionalist/internashionalist/blob/main/README.md)

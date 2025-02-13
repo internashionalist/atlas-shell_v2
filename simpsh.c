@@ -3,9 +3,9 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-// #include "util_str.h" is nowhere
-#include "util_which.h"
-#include "util_env.h"
+#include "defined_functions/util_str.h"
+#include "defined_functions/util_which.h"
+#include "defined_functions/util_env.h"
 
 int process_cmd(char **input_tokens)
 {
