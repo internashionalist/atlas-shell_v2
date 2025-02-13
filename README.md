@@ -1,11 +1,10 @@
-#Shell v2 : Shell Harder 
+# SHELL v2 : SHELL HARDER
 
 ## Contents
 
 [Synopsis](#synopsis)<br>
 [Features](#features)<br>
 [Use Instructions](#use-instructions)<br>
-[Flowchart](#flowchart)<br>
 [Authors](#authors)
 
 ## Synopsis
@@ -15,7 +14,7 @@
 ## Features
 
 - Comprehensive Error Handling
-- Graceful Signals `EOF` and `SIGINT` 
+- Graceful Signals `EOF` and `SIGINT`
 - Execution of Arguments in Command Line
 - Built-In Implementation: `exit`, `setenv`, `unsetenv`, `env`, and `cd`
 - Environmental Variables: `PATH`, `OLDPWD`, and `HOME`
