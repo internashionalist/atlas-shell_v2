@@ -1,0 +1,63 @@
+.TH man 1 "13 Feb 2025" "Shell v2: Shell Harder"
+.SH NAME
+.B hsh
+\- a simple command line interface
+.SH SYNOPSIS
+.B hsh
+.R [command file]
+.SH DESCRIPTION
+.P
+Program
+.B hsh
+/ Shell Harder provides a command line interface that simulates core Unix shell functions. It continuously shows a prompt `$` while waiting for user commands. It supports both interactive operation and non-interactive (scripted or piped) operation.
+.SS Overview
+The shell reads commands, interprets them, and executes the specified operations. It functions as a read-eval-print loop (REPL).
+.SS Invocation
+When no arguments are provided and standard input is attached to a terminal, the shell enters interactive mode. A prompt is displayed before each command. Any errors - whether syntax issues, internal failures, or program errors - are flagged and printed accordingly.
+
+If input is redirected from a non-terminal or if a script argument is provided, then the shell works in non-interactive mode, where it will read commands until EOF is reached.
+.SS Structure
+The shell processes input lines, splitting them into tokens based on tabs/spaces as well as both control and I/O redirection separators.
+.IP
+Control operators:
+.B && || | ;
+.IP
+I/O redirection operators:
+.B < > << >>
+.SS Commands
+After input has been split into tokens, the shell identifies if the command contains separators and/or corresponds to a built-in function or an executable program in the system.
+.SS Redirections
+Redirections change from where a command reads input or to where it sends output. In general, redirections open, close, or duplicate an existing reference to a file.
+.SS Search & Execution
+Commands are first searched as built-ins; if not found, the shell searches the file system. Built-ins run within the shell while external commands receive arguments and environment variables.
+.SS Path Search
+For external executables, the shell refers to the `PATH`. The command input is appended to each directory until a matching file is found.
+.SS Complex Commands
+Separators and multiple commands require additional processes. Redirections bind to only one command at a time, while separators can chain or alter execution flow.
+.SS Pipes
+A pipeline uses the `|` separator to connect the standard output of one command to the standard input of the next. The shell waits until the entire pipeline finishes. However, redirections may still apply to individual commands.
+.SS Command Lists
+A command list consists of one or more commands separated by `;`, `&&`, or `||`. The shell executes commands in sequence, waiting for each to complete first.
+.SH BUILT-IN COMMANDS
+.TP
+.B CTRL+D (EOF)
+Exits the shell and returns the status of the last command.
+.TP
+.B exit [exit code]
+Exits the shell, using the last command’s status or the provided code.
+.TP
+.B env
+Prints environment variables.
+.TP
+.B setenv
+Creates or updates an environment variable.
+.TP
+.B unsetenv
+Removes an environment variable.
+.TP
+.B cd
+Changes directories. `cd -` moves to the previous directory. Empty `cd` goes to `HOME`.
+.SH AUTHORS
+Jose "Chepe" Olmos
+AlexAndrea "Ariel" Lopez
+Taylor "Nash" Thames

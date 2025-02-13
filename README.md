@@ -1,4 +1,4 @@
-# Simple Shell v2 : Electric Boogaloo 
+#Shell v2 : Shell Harder 
 
 ## Contents
 
@@ -10,7 +10,7 @@
 
 ## Synopsis
 
-Simple Shell v2 implements a command-line shell that mimics basic Unix shell functionality. While continuously displaying a prompt ($), it allows users to navigate data and execute a number of commands. The shell can operate in both interactive and non-interactive modes.
+"Shell v2 : Shell Harder" implements a command line shell that mimics basic Unix shell functionality. While continuously displaying a prompt ($), it allows users to navigate data and execute a number of commands. The shell can operate in both interactive and non-interactive modes.
 
 ## Features
 
