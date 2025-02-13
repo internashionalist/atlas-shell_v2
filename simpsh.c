@@ -12,36 +12,51 @@
 int process_cmd(char **input_tokens)
 {
 	int wstatus;
-	char *fullpath;
+	char *command = input_tokens[0];
+	char *fullpath = NULL;
 
-	fullpath = _which(input_tokens[0]);
-
-	if (!fullpath)
+	if (command[0] == '.' || command[0] == '/') /* absolute PATH */
 	{
-		free(fullpath);
-		fullpath = NULL;
-		return(-1);
+		if (access(command, X_OK) == 0) /* check if executable */
+		{
+			fullpath = str_dup(command);
+		}
+		else
+			return (-1);
 	}
 	else
 	{
-		input_tokens[0] = fullpath;
-	}
-
-	switch (fork())
-	{
-		case -1:
+		fullpath = _which(command); /* search PATH */
+		if (!fullpath)
 			return (-1);
-		case 0:
-			if (execve(input_tokens[0], input_tokens, environ) == -1)
-				return (-1);
-			break;
-		default:
-			wait(&wstatus);
 	}
 
-	free(fullpath);
+	input_tokens[0] = fullpath; /* replace command with complete PATH */
+
+	pid_t pid = fork(); /* fork to create child process */
+	if (pid == -1)
+	{
+		perror("fork");
+		return (-1);
+	}
+
+	if (pid == 0) /* child process */
+	{
+		if (execve(input_tokens[0], input_tokens, environ) == -1) /* execute */
+		{
+			perror("execve");
+			exit(127);
+		}
+	}
+	else
+	{
+		wait(&wstatus); /* wait for child process to finish */
+	}
+
+	free(fullpath); /* free allocated memory in parent process */
 	return (wstatus);
 }
+
 
 int main(void)
 {
@@ -57,14 +72,14 @@ int main(void)
 		if (isatty(STDIN_FILENO)) /* if interactive mode */
 			printf("$ ");
 
-		n_read = getline(&inputline, &input_len, stdin);
+		n_read = getline(&inputline, &input_len, stdin); /* read input */
 		if (n_read == -1) /* EOF or error */
 			break;
 
 		if (n_read > 0 && inputline[n_read - 1] == '\n') /* remove \n */
 			inputline[n_read - 1] = '\0';
 
-		if (_strcmp(inputline, "exit") == 0) /* exit command */
+		if (_strcmp(inputline, "exit") == 0) /* exit built-in */
 			break;
 
 		input_tokens = tokenize(inputline, " \t", 1024); /* tokenize */
@@ -74,7 +89,7 @@ int main(void)
 			continue;
 		}
 
-		if (_strcmp(input_tokens[0], "cd") == 0)
+		if (_strcmp(input_tokens[0], "cd") == 0) /* cd built-in */
 		{
 			change_dir(input_tokens);
 		}
