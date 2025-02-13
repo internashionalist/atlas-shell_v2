@@ -46,30 +46,40 @@ int main(void)
 	char *inputline = NULL;
 	char **input_tokens = NULL;
 	size_t input_len = 0;
+	ssize_t num_read;
 
 	init_env();
 
 	while (1)
 	{
-		printf("$ ");
+		if (isatty(STDIN_FILENO)) /* if interactive mode */
+			printf("$ ");
 
-		if (getline(&inputline, &input_len, stdin) == -1)
-			continue;
-
-		if (!strcmp(inputline, "exit\n"))
-		{
+		num_read = getline(&inputline, &input_len, stdin);
+		if (num_read == -1) /* EOF or error */
 			break;
-		}
-		else
+
+		if (numread > 0 && inputline[numread - 1] == '\n') /* remove \n */
+			inputline[numread - 1] = '\0';
+
+		if (_strcmp(inputline, "exit") == 0) /* exit command */
+			break;
+
+		input_tokens = tokenize(inputline, " \t", 1024); /* tokenize */
+		if (!input_tokens || !input_tokens[0]) /* if empty input */
 		{
-			input_tokens = tokenize(inputline, " \n", 1024);
-			process_cmd(input_tokens);
 			free(input_tokens);
+			continue;
 		}
+
+		int status = process_cmd(input_tokens); /* process command */
+		if (status == -1)
+			printf("Command not found: %s\n", input_tokens[0]);
+
+		free(input_tokens);
 	}
 
 	reset_env();
-
 	free(inputline);
 
 	return (0);
