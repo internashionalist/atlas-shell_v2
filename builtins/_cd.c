@@ -2,20 +2,15 @@
 #include <stdio.h>
 
 // Built in for change directory
-int change_directory (const char *pathname, char *old, size_t len)
+int change_directory(char **args)
 {
-
-    if (path) {
-        fprintf("cd $HOME")
+    if (args[1] == NULL) {
+        fprintf(stderr, "hsh: expected argument to \"cd\"\n");
+    } else {
+        if (chdir(args[1]) != 0) {
+            perror("hsh")
+        }
     }
-    // self made strlen
-    if (path == NULL || my_strlen(path) == 0) 
-    {
-        fprintf(stderr, "cd: missing argument\n");
-        return;
-    }
-    if (chdir(path) != 0) {
-        perror("cd");
-    }
+    return 1;
 }
 // Ariel
