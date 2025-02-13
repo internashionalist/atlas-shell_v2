@@ -5,7 +5,6 @@
 [Synopsis](#synopsis)<br>
 [Features](#features)<br>
 [Use Instructions](#use-instructions)<br>
-[Flowchart](#flowchart)<br>
 [Authors](#authors)
 
 ## Synopsis
