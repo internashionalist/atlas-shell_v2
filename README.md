@@ -1,4 +1,4 @@
-# SHELL v2 : SHELL HARDER
+# Shell v2 : Shell Harder 
 
 ## Contents
 
