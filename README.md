@@ -2,11 +2,11 @@
 
 ## Contents
 
-- [Synopsis](#synopsis)
-- [Features](#features)
-- [Use Instructions](#use-instructions)
-- [Flowchart](#flowchart)
-- [Authors](#authors)
+[Synopsis](#synopsis)<br>
+[Features](#features)<br>
+[Use Instructions](#use-instructions)<br>
+[Flowchart](#flowchart)<br>
+[Authors](#authors)
 
 ## Synopsis
 
@@ -50,6 +50,6 @@ gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 
 ## Authors
 
-- Jose "Chepe" Olmos [@chepeniv](https://github.com/chepeniv)<br>
-- AlexAndrea "Ariel" Lopez [@NecroKnightMare](https://github.com/NecroKnightMare)<br>
-- Taylor "Nash" Thames [@internashionalist](https://github.com/internashionalist/internashionalist/blob/main/README.md)
+Jose "Chepe" Olmos [@chepeniv](https://github.com/chepeniv)<br>
+AlexAndrea "Ariel" Lopez [@NecroKnightMare](https://github.com/NecroKnightMare)<br>
+Taylor "Nash" Thames [@internashionalist](https://github.com/internashionalist/internashionalist/blob/main/README.md)
