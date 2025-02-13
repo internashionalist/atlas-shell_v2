@@ -6,19 +6,20 @@
 
 int change_dir(char **tokens)
 {
-    char *path = tokens[1];
+    char *path = tokens[1]; /* get path from tokens */
 
-    if (!path)
+    if (!path) /* if no path given, go HOME */
     {
-        path = _getenv("HOME");
-        if (!path)
+        char *home = _getenv("HOME");
+        if (!home)
         {
-            fprintf(stderr, "cd: HOME not set\n");
-            return (-1);
+            return (0);
         }
+
+        path = home;
     }
 
-    if (chdir(path) != 0)
+    if (chdir(path) != 0) /* attempt cd */
     {
         perror("cd");
         return (-1);
