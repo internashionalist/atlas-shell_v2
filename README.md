@@ -1,74 +1,55 @@
-# $\color{Mulberry}{SIMPLE\ SHELL\ }$ 
+# Simple Shell v2 : Electric Boogaloo 
 
-a simple shell takes user input from the command line and interprets it from a path to correctly output from bin directory. 
+## Contents
 
-## $\color{Mulberry}{Features\ }$
-	
-Limits or to use string library <string.h> and custom functions.
-	
-## $\color{Mulberry}{Motivation\ }$
+[Synopsis](#synopsis)<br>
+[Features](#features)<br>
+[Use Instructions](#use-instructions)<br>
+[Flowchart](#flowchart)<br>
+[Authors](#authors)
 
-This program is to recreate a shell but in its simplicity to utilize our knowledge thusfar in a group project consisting of three students.
+## Synopsis
 
-	
-## $\color{Mulberry}{Code\ Language\ }$
+Simple Shell v2 implements a command-line shell that mimics basic Unix shell functionality. While continuously displaying a prompt ($), it allows users to navigate data and execute a number of commands. The shell can operate in both interactive and non-interactive modes.
 
-Language C for the functions and ROFF for the man page.
-	
-## $\color{Mulberry}{Framework\ }$
+## Features
 
-Works in Windows 11 Ubuntu 22.04, MAC, and Linux.
-	
-## $\color{Mulberry}{Code\ Example\ }$
-	
-	if (pid == 0) /** child process through fork*/
-	{
-		if (execvp(command, args) == -1)
-		{
-			perror("Failed to execute custom command");
-			exit(EXIT_FAILURE);
-		}
-	}
-	
-## $\color{Mulberry}{Installation\ }$
+- Comprehensive Error Handling
+- Graceful Signals `EOF` and `SIGINT` 
+- Execution of Arguments in Command Line
+- Built-In Implementation: `exit`, `setenv`, `unsetenv`, `env`, and `cd`
+- Environmental Variables: `PATH`, `OLDPWD`, and `HOME`
+- Handling of Input/Output Redirections and Command Separators: `> >> < << || ;`
+- Handling of Both Single and Connected Piping
 
-Make sure the latest Windows, Mac, Linux is installed in your operating system. This code was compiled with gcc, so install this if you do not have it already installed.	
+## Use Instructions
 
-    Compile it using gcc std=gnu89
+**Clone into Simple Shell v2 Repository:**
 
-	
-1. + Copy the code into the files desired for the program.
-2. + Compile it gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
-3. + After successfully compiling, type ./hsh
-4. + Start typing commands!
-	
-## $\color{Mulberry}{Tests\ }$
-	
-All tests done in Visual Studios. Compiled differently in VS and had to recompose code to compile with std=gnu89. Useed ./ tests to test if functions/files worked, used valgrind to check for memory links and valgrind ggdb3 for detailed errors.
-	
-## $\color{Mulberry}{How\ To\ Use\ }$
+```bash
+git clone https://github.com/NecroKnightMare/atlas-shell_v2.git
+```
 
-After compiling successfully and code runs as it should type ./hsh and your prompt should show on a new line. 
+**Open the Shell Directory:**
 
-* + Type in a command such as ls -la, grep, cat, yes, echo, rm, etc...
+```bash
+cd atlas-shell_v2
+```
 
-* + + if unsure of where to find directoory, type ls and bin, zsh, bash are directories that could pop up. type cd .. until you are in the bin directory. Type ls aand a long list of commands should appear to give you an idea of what command are executable.
+**Compile Contents:**
 
-* + After typing command uou should see the condition being executed and be provided with a new line, to continue the loop.
+```bash
+gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
+```
 
-* + If done type ctl + c to end the program.
+**Run Shell Program:**
 
-## $\color{Mulberry}{Contribute\ }$
+```bash
+./hsh
+```
 
-@Simple atlas-simple_shell
-@NecroKnightMare atlas-simple_shell
+## Authors
 
-## $\color{Mulberry}{Credits\ }$
-
-Atlas School (Holberton) has created this project for students to utilize to create unique code.
-
-## $\color{Mulberry}{License\ }$
-
-MIT © Jose (Chepe) Olmos | AlexAndrea (Ariel) Lopez | Nash Thames
-
-## $\color{Mulberry}{Flowchart\ }$
+Jose "Chepe" Olmos [@chepeniv](https://github.com/chepeniv)<br>
+AlexAndrea "Ariel" Lopez [@NecroKnightMare](https://github.com/NecroKnightMare)<br>
+Taylor "Nash" Thames [@internashionalist](https://github.com/internashionalist/internashionalist/blob/main/README.md)
