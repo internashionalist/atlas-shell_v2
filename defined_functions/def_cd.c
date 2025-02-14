@@ -1,8 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <limits.h>
 #include "util_cd.h"
 #include "util_env.h"
+#include "_util_str.h"
 
 int change_dir(char **tokens)
 {
@@ -18,7 +20,7 @@ int change_dir(char **tokens)
 
         path = home;
     }
-    else if (strcmp(path, "-") == 0) /* if path is "-" */
+    else if (_strcmp(path, "-") == 0) /* if path is "-" */
     {
         char *oldpwd = _getenv("OLDPWD");
         if (!oldpwd)
@@ -34,6 +36,13 @@ int change_dir(char **tokens)
     {
         fprintf(stderr, "./hsh: 1: cd: can't cd to %s\n", path);
         return (-1);
+    }
+
+    if (_strcmp(tokens[1], "-") == 0)
+    {
+        char cwd[PATH_MAX];
+        if (getcwd(cwd, sizeof(cwd)) != NULL)
+            printf("%s\n", cwd); /* prove it's still the same CWD */
     }
 
     return (0);
