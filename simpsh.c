@@ -18,9 +18,7 @@ int process_cmd(char **input_tokens)
 	if (command[0] == '.' || command[0] == '/') /* absolute PATH */
 	{
 		if (access(command, X_OK) == 0) /* check if executable */
-		{
 			fullpath = str_dup(command);
-		}
 		else
 			return (-1);
 	}
@@ -90,12 +88,10 @@ int main(void)
 		{
 			exit_shell(input_tokens);
 		}
-
 		else if (_strcmp(input_tokens[0], "cd") == 0) /* cd built-in */
 		{
 			change_dir(input_tokens);
 		}
-
 		else if (_strcmp(input_tokens[0], "env") == 0) /* env built-in */
 		{
 			print_env();
@@ -112,6 +108,5 @@ int main(void)
 
 	reset_env();
 	free(inputline);
-
 	return (0);
 }
