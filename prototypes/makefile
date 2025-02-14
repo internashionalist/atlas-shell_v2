@@ -16,7 +16,7 @@ all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
 	environ which simpsh which env-utils getenv setenv unsetenv
 
 interpreter:
-	${CCMD} interpreter.test.c -o interpreter.exec
+	${CCMD} ${UTILS} interpretor.test.c -o interpretor.exec
 
 prepipe:
 	${CCMD} pipe-pre.c -o prepipe.exec

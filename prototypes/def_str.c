@@ -7,12 +7,11 @@
 
 int str_len(const char *text)
 {
-	int len = 0;
+	int c;
 
-	while (text[len] != '\0')
-		len++;
+	for (c = 0; text[c] != 0; ++c);
 
-	return (len);
+	return (c);
 }
 
 void str_paste(char **dest, const char *source)
@@ -34,7 +33,8 @@ char *str_dup(const char *source)
 	return (duplet);
 }
 
-char *str_concat(const char *prefix, const char *suffix)
+/*  leaves prefix alone and returns a duplicate concat string*/
+char *str_dupcat(char *prefix, const char *suffix)
 {
 	int a = 0, b = 0;
 	char *concat, *tail;
@@ -46,6 +46,16 @@ char *str_concat(const char *prefix, const char *suffix)
 	str_paste(&concat, prefix);
 	tail = &(concat[a]);
 	str_paste(&tail, suffix);
+
+	return (concat);
+}
+
+/* frees prefix and returns a new malloc string*/
+char *str_cat(char *prefix, char *suffix)
+{
+	char *concat = str_dupcat(prefix, suffix);
+
+	free(prefix);
 
 	return (concat);
 }
@@ -99,39 +109,82 @@ char *str_ncopy(const char *text, int n)
 	return (copy);
 }
 
-char *read_line(char *text, int reset)
-{
-	char *line;
-	static int end = 0;
-	int start = 0, len = 0;
-
-	if ((end == -1) || (reset > 0))
-	{
-		end = 0;
-		return (NULL);
-	}
-
-	start = end + 1;
-	do
-		end++;
-	while (
-		(text[end] != '\0') &&
-		(text[end] != '\n'));
-
-	len = end - start;
-
-	if (text[end] == '\0')
-		end = -1;
-
-	line = str_ncopy(&(text[start]), len + 1);
-
-	return (line);
-}
-
-void mem_init(char **buffer, int size, int value)
+void strmem_init(char **buffer, int size, int value)
 {
 	int index;
 
 	for (index = 0; index < size; index++)
 		(*buffer)[index] = value;
+}
+
+void strmem_realloc(char *buffer, int add)
+{
+	int len;
+	char *new_buffer;
+
+	len = str_len(buffer);
+	len = len + add + 1;
+
+	new_buffer = malloc(sizeof(char) * len);
+	strmem_init(&new_buffer, len, 0);
+	str_paste(&new_buffer, buffer);
+	free(buffer);
+}
+
+char *str_strip(char *text)
+{
+	int w = 0;
+	char **words, *sentence, *whitespace = " \t\n";
+
+	text = str_dup(text);
+	words = tokenize(text, whitespace, 2048);
+	sentence = malloc(sizeof(char)* 1);
+	strmem_init(&sentence, 1, 0);
+	while (words[w] != NULL)
+	{
+		sentence = str_cat(sentence, words[w]);
+		sentence = str_cat(sentence, " ");
+		w++;
+	}
+
+	free(text);
+	free(words);
+
+	return (sentence);
+}
+
+char *str_duptok(char *text, char *delims)
+{
+	char *tok;
+
+	tok = strtok(text, delims);
+	tok = str_dup(tok);
+
+	return (tok);
+}
+
+char *read_line(char *text)
+{
+	static char **lines;
+	static char *buffer = NULL;
+	static int l = 0;
+	char *line;
+
+	if (text)
+	{
+		buffer = str_dup(text);
+		lines = tokenize(buffer, "\n", 2048);
+	}
+
+	if ((line = lines[l]))
+		l++;
+	else
+	{
+		l = 0;
+		free(buffer);
+		free(lines);
+		/* wipe_tokens(lines); */
+	}
+
+	return (line);
 }

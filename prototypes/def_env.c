@@ -8,8 +8,8 @@
 
 char *compose_varval(char *var, char *val)
 {
-	char *var_eq = str_concat(var, "=");
-	char *varval = str_concat(var_eq, val);
+	char *var_eq = str_dupcat(var, "=");
+	char *varval = str_dupcat(var_eq, val);
 
 	free(var_eq);
 	return (varval);
@@ -69,7 +69,7 @@ int _getenvid(const char *name)
 	int len = 0, index = 0;
 	char *name_eq;
 
-	name_eq = str_concat(name, "=");
+	name_eq = str_dupcat(name, "=");
 
 	len = str_len(name_eq);
 

@@ -86,8 +86,8 @@ char *build_fullpath(char *dirname, char *filename)
 {
 	char *dir_slash_file, *dir_slash;
 
-	dir_slash = str_concat(dirname, "/");
-	dir_slash_file = str_concat(dir_slash, filename);
+	dir_slash = str_dupcat(dirname, "/");
+	dir_slash_file = str_dupcat(dir_slash, filename);
 	free(dir_slash);
 
 	return (dir_slash_file);
