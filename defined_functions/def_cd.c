@@ -14,9 +14,7 @@ int change_dir(char **tokens)
     {
         char *home = _getenv("HOME");
         if (!home)
-        {
             return (0);
-        }
 
         path = home;
     }
@@ -32,10 +30,22 @@ int change_dir(char **tokens)
         }
         path = oldpwd; /* otherwise, move on */
     }
+
+    {
+        char *oldpwd = _getenv("PWD"); /* previous working directory */
+        if (oldpwd)
+            _setenv("OLDPWD", oldpwd, 1);
+    }
     if (chdir(path) != 0) /* attempt cd */
     {
         fprintf(stderr, "./hsh: 1: cd: can't cd to %s\n", path);
         return (-1);
+    }
+
+    {
+        char newcwd[PATH_MAX];
+        if (getcwd(newcwd, sizeof(newcwd)) != NULL) /* get new CWD */
+            _setenv("PWD", newcwd, 1);
     }
 
     if (tokens[1] && _strcmp(tokens[1], "-") == 0)
