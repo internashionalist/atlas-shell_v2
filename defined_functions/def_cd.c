@@ -21,7 +21,7 @@ int change_dir(char **tokens)
 
     if (chdir(path) != 0) /* attempt cd */
     {
-        perror("cd");
+        pfprintf(stderr, "./hsh: 1: cd: can't cd to %s\n", path);
         return (-1);
     }
 
