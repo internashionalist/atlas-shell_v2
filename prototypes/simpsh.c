@@ -7,10 +7,12 @@
 #include "util_which.h"
 #include "util_env.h"
 
-int process_cmd(char **input_tokens)
+int process_cmd(char *inputline)
 {
 	int wstatus;
-	char *fullpath;
+	char *fullpath, **input_tokens = NULL;
+
+	input_tokens = tokenize(inputline, " \n", 1024);
 
 	fullpath = _which(input_tokens[0]);
 
@@ -38,13 +40,13 @@ int process_cmd(char **input_tokens)
 	}
 
 	free(fullpath);
+	free(input_tokens);
 	return (wstatus);
 }
 
 int main(void)
 {
 	char *inputline = NULL;
-	char **input_tokens = NULL;
 	size_t input_len = 0;
 
 	init_env();
@@ -57,15 +59,9 @@ int main(void)
 			continue;
 
 		if (!strcmp(inputline, "exit\n"))
-		{
 			break;
-		}
 		else
-		{
-			input_tokens = tokenize(inputline, " \n", 1024);
-			process_cmd(input_tokens);
-			free(input_tokens);
-		}
+			process_cmd(inputline);
 	}
 
 	reset_env();
