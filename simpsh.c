@@ -6,8 +6,8 @@
 #include "defined_functions/util_str.h"
 #include "defined_functions/util_which.h"
 #include "defined_functions/util_env.h"
-#include "defined_functions/_util_str.h"
 #include "defined_functions/util_cd.h"
+#include "defined_functions/util_exit.h"
 
 int process_cmd(char **input_tokens)
 {
@@ -79,9 +79,6 @@ int main(void)
 		if (n_read > 0 && inputline[n_read - 1] == '\n') /* remove \n */
 			inputline[n_read - 1] = '\0';
 
-		if (_strcmp(inputline, "exit") == 0) /* exit built-in */
-			break;
-
 		input_tokens = tokenize(inputline, " \t", 1024); /* tokenize */
 		if (!input_tokens || !input_tokens[0]) /* if empty input */
 		{
@@ -89,7 +86,12 @@ int main(void)
 			continue;
 		}
 
-		if (_strcmp(input_tokens[0], "cd") == 0) /* cd built-in */
+				if (_strcmp(inputline, "exit") == 0) /* exit built-in */
+		{
+			exit_shell(input_tokens);
+		}
+
+		else if (_strcmp(input_tokens[0], "cd") == 0) /* cd built-in */
 		{
 			change_dir(input_tokens);
 		}

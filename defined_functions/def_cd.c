@@ -4,7 +4,7 @@
 #include <limits.h>
 #include "util_cd.h"
 #include "util_env.h"
-#include "_util_str.h"
+#include "util_str.h"
 
 int change_dir(char **tokens)
 {
