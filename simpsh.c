@@ -86,7 +86,7 @@ int main(void)
 			continue;
 		}
 
-				if (_strcmp(inputline, "exit") == 0) /* exit built-in */
+		if (_strcmp(input_tokens[0], "exit") == 0) /* exit built-in */
 		{
 			exit_shell(input_tokens);
 		}
