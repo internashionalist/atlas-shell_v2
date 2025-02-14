@@ -94,7 +94,7 @@ int main(void)
 			change_dir(input_tokens);
 		}
 
-		if (_strcmp(input_tokens[0], "env") == 0) /* env built-in */
+		else if (_strcmp(input_tokens[0], "env") == 0) /* env built-in */
 		{
 			print_env();
 		}
