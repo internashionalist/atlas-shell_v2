@@ -18,7 +18,18 @@ int change_dir(char **tokens)
 
         path = home;
     }
-
+    else if (strcmp(path, "-") == 0) /* if path is "-" */
+    {
+        char *oldpwd = _getenv("OLDPWD");
+        if (!oldpwd)
+        {
+            char cwd[PATH_MAX]; /* current working directory buffer */
+            if (getcwd(cwd, sizeof(cwd)) != NULL)
+                printf("%s\n", cwd);
+            return 0;
+        }
+        path = oldpwd; /* otherwise, move on */
+    }
     if (chdir(path) != 0) /* attempt cd */
     {
         fprintf(stderr, "./hsh: 1: cd: can't cd to %s\n", path);
