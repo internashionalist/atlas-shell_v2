@@ -31,12 +31,19 @@ int change_dir(char **tokens)
         path = oldpwd; /* otherwise, move on */
     }
 
+    char path_copy[PATH_MAX];
+    _strcpy(path_copy, path);
+
     {
         char *oldpwd = _getenv("PWD"); /* previous working directory */
         if (oldpwd)
-            _setenv("OLDPWD", oldpwd, 1);
+        {
+            char local_oldpwd[PATH_MAX];
+            _strcpy(local_oldpwd, oldpwd);
+            _setenv("OLDPWD", local_oldpwd, 1);
+        }
     }
-    if (chdir(path) != 0) /* attempt cd */
+    if (chdir(path_copy) != 0) /* attempt cd */
     {
         fprintf(stderr, "./hsh: 1: cd: can't cd to %s\n", path);
         return (-1);
