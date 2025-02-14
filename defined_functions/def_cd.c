@@ -20,7 +20,7 @@ int change_dir(char **tokens)
 
         path = home;
     }
-    else if (_strcmp(path, "-") == 0) /* if path is "-" */
+    else if (path && _strcmp(path, "-") == 0) /* if path is "-" */
     {
         char *oldpwd = _getenv("OLDPWD");
         if (!oldpwd)
@@ -38,9 +38,9 @@ int change_dir(char **tokens)
         return (-1);
     }
 
-    if (_strcmp(tokens[1], "-") == 0)
+    if (tokens[1] && _strcmp(tokens[1], "-") == 0)
     {
-        char cwd[PATH_MAX];
+        char cwd[PATH_MAX]; /* current working directory buffer */
         if (getcwd(cwd, sizeof(cwd)) != NULL)
             printf("%s\n", cwd); /* prove it's still the same CWD */
     }
