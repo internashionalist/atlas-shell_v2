@@ -113,7 +113,7 @@ void append_env(char *varval)
 
 /******** EXPOSED ********/
 
-char **reset_env()
+char **reset_env(void)
 {
 	char **old = environ;
 
@@ -145,12 +145,12 @@ void init_env(void)
 	}
 }
 
-void print_env()
+void print_env(void)
 {
 	int i = 0;
 	while (environ[i] != NULL)
 	{
-		printf("[%d] %s\n", i, environ[i]);
+		printf("%s\n", environ[i]);
 		i++;
 	}
 }

@@ -93,6 +93,11 @@ int main(void)
 		{
 			change_dir(input_tokens);
 		}
+
+		if (_strcmp(input_tokens[0], "env") == 0) /* env built-in */
+		{
+			print_env();
+		}
 		else
 		{
 			int status = process_cmd(input_tokens); /* process command */
