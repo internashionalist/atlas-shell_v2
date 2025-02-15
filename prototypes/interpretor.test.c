@@ -16,14 +16,19 @@ int main(int c, char **args)
 
 	cmdfile = open(args[1], O_RDONLY);
 	cmdtext = malloc(sizeof(char) * filesize);
-	mem_init(&cmdtext, filesize, 0);
+	strmem_init(&cmdtext, filesize, 0);
 	read(cmdfile, cmdtext, filesize);
 
-	while ((cmdline = read_line(cmdtext, 0)))
-	{
+	printf("\n%s\n", cmdtext);
 
-		free(cmdline);
+	cmdline = read_line(cmdtext);
+	while (cmdline)
+	{
+		proc_cmds(cmdline);
+		cmdline = read_line(NULL);
 	}
+
+	free(cmdline);
 	free(cmdtext);
 
 	return (0);

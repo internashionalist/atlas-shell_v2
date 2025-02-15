@@ -140,12 +140,14 @@ char *str_strip(char *text)
 	words = tokenize(text, whitespace, 2048);
 	sentence = malloc(sizeof(char)* 1);
 	strmem_init(&sentence, 1, 0);
-	while (words[w] != NULL)
+	while (words[w + 1] != NULL)
 	{
 		sentence = str_cat(sentence, words[w]);
 		sentence = str_cat(sentence, " ");
 		w++;
 	}
+
+	sentence = str_cat(sentence, words[w]);
 
 	free(text);
 	free(words);
