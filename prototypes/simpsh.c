@@ -7,7 +7,7 @@
 #include "util_which.h"
 #include "util_env.h"
 
-int process_cmd(char *inputline)
+int run_cmd(char *inputline)
 {
 	int wstatus;
 	char *fullpath, **input_tokens = NULL;
@@ -61,7 +61,7 @@ int main(void)
 		if (!strcmp(inputline, "exit\n"))
 			break;
 		else
-			process_cmd(inputline);
+			run_cmd(inputline);
 	}
 
 	reset_env();
