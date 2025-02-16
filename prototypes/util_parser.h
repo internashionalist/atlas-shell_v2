@@ -21,5 +21,8 @@ typedef enum _part
 char **serializer(char *cmdstr, int (*partitions)[], part p);
 char *get_redir_str(int code);
 char *get_sep_str(int code);
+/* char *get_partition(char *cmdline, int *sep, part p); */
+char *get_separation(const char *line, int *sep);
+char *get_redirection(const char *line, int *part);
 
 #endif /* _UTIL_PARSER_ */

@@ -5,10 +5,18 @@
 #include "util_str.h"
 #include "util_cmd.h"
 
-// tokenize
-// execute
+int find_string(char **strings, char *str)
+{
+	int index = -1;
 
-int check_redir_chars(char *string, int pos)
+	while (strings[index] != NULL)
+		if (strings[index] == str)
+			break;
+
+	return (index);
+}
+
+int check_redir_chars(const char *string, int pos)
 {
 	switch (string[pos])
 	{
@@ -27,7 +35,7 @@ int check_redir_chars(char *string, int pos)
 	}
 }
 
-int check_sep_chars(char *string, int pos)
+int check_sep_chars(const char *string, int pos)
 {
 	switch (string[pos])
 	{
@@ -98,95 +106,95 @@ int is_double_redir(int symbol)
 	return (0);
 }
 
-char **serializer(
-char *cmdstr,
-int (*partitions)[],
-part p)
+void setup_partitioner(
+part p,
+int (**char_check)(const char *, int),
+int (**is_double)(int),
+char **delims)
 {
-	char **cmds, *copy, *delims;
-	int c = 0, s = 0, split = -1, size = MAX_CMDS;
-	int (*char_check)(char *, int);
-	int (*is_double)(int);
-
-	/* setup desired serialization type*/
 	switch (p)
 	{
-		case SEPAR:
-			char_check = check_sep_chars;
-			is_double = is_double_sep;
-			delims = ";|&";
-			break;
-		case REDIR:
-			char_check = check_redir_chars;
-			is_double = is_double_redir;
-			delims = "<>";
-			break;
-		default:
-			return (NULL);
+	case SEPAR:
+		*char_check = check_sep_chars;
+		*is_double = is_double_sep;
+		*delims = ";|&";
+		break;
+	case REDIR:
+		*char_check = check_redir_chars;
+		*is_double = is_double_redir;
+		*delims = "<>";
+		break;
 	}
-
-	copy = str_dup(cmdstr);
-	cmds = malloc(sizeof(void *) * size);
-
-	/* create array heads */
-	cmds[s] = strtok(copy, delims);
-	(*partitions)[s] = -1;
-	s++;
-
-	/* build array bodies */
-	while (cmdstr[c] != '\0')
-	{
-		split = char_check(cmdstr, c);
-		if (split > -1)
-		{
-			(*partitions)[s] = split;
-			cmds[s] = strtok(NULL, delims);
-			s++;
-			if (is_double(split))
-				c++;
-		}
-		c++;
-	}
-
-	/* close array tails */
-	cmds[s] = strtok(NULL, delims);
-	(*partitions)[s] = -1;
-	cmds[s + 1] = NULL;
-
-	return (cmds);
 }
 
-char **cmd_io(char *cmdstr)
+char *get_partition(char *copy, int *pos, int *sep, part kind)
 {
-	char **io_cmd;
-	char *io_inst[] = {"<", "<<", ">", ">>"};
-	char *delims = "<>";
-	int redir, c = 0;
+	char *partition = NULL;
+	char *delims;
+	int (*char_check)(const char *, int);
+	int (*is_double)(int);
+	int p = 0;
 
-	while (cmdstr[c] != '\0')
+	setup_partitioner(kind, &char_check, &is_double, &delims);
+
+	while (copy[p] != '\0')
 	{
-		redir = check_redir_chars(cmdstr, c);
-		if (redir > -1)
-			break;
-		c++;
+		*sep = char_check(copy, p);
+		p++;
+		if (*sep > -1)
+		{
+			partition = strtok(copy, delims);
+			if (is_double(*sep))
+				p++;
+			*pos += p;
+			return (partition);
+		}
 	}
 
-	if (redir > -1)
-	{
-		io_cmd = malloc(sizeof(void *) * 4);
-		io_cmd[0] = strtok(cmdstr, delims);
-		io_cmd[1] = io_inst[redir];
-		io_cmd[2] = strtok(NULL, delims);
-		io_cmd[3] = NULL;
-	}
-	else
-	{
-		io_cmd = malloc(sizeof(void *) * 2);
-		io_cmd[0] = cmdstr;
-		io_cmd[1] = NULL;
-	}
+	partition = strtok(copy, delims);
+	*pos += p;
 
-	return (io_cmd);
+	return (partition);
 }
 
-//tokenizer
+char *get_separation(const char *line, int *sep)
+{
+	static int pos = 0;
+	static char *copy = NULL;
+	char *separation;
+
+	free(copy);
+	copy = str_dup(&(line[pos]));
+
+	separation = get_partition(copy, &pos, sep, SEPAR);
+
+	if (!separation)
+	{
+		free(copy);
+		copy = NULL;
+		pos = 0;
+	}
+
+	return (separation);
+}
+
+char *get_redirection(const char *line, int *redir)
+{
+	static int pos = 0;
+	static char *copy = NULL;
+	char *redirection;
+
+	free(copy);
+	copy = str_dup(&(line[pos]));
+
+	redirection = get_partition(copy, &pos, redir, REDIR);
+
+	if (!redirection)
+	{
+		free(copy);
+		copy = NULL;
+		pos = 0;
+	}
+
+	return (redirection);
+}

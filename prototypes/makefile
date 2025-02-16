@@ -1,5 +1,6 @@
 CC = gcc
 
+MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
 UTILS = def_*.c
 CFLAGS = -Wall -Werror -Wextra -ggdb3
 # I_FLAGS = $(shell pkg-config --cflags gtk4)
@@ -16,7 +17,9 @@ all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
 	environ which simpsh which env-utils getenv setenv unsetenv
 
 interpreter:
-	${CCMD} ${UTILS} interpretor.test.c -o interpretor.exec
+	clear
+	${CCMD} ${UTILS} interpretor.test.c -o interpreter.exec
+	${MEMTEST} ./interpreter.exec ./dummy_cmds.sh
 
 prepipe:
 	${CCMD} pipe-pre.c -o prepipe.exec

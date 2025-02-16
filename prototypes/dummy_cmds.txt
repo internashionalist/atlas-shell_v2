@@ -1,5 +1,0 @@
-twoAmp < L > R && bar | twoBar > R || semi << LL ; end > R < L >> RR
-twoAmp >> RR > R && bar | semi ; twoBar || amp  > R & end < L
-semi < L >> RR ;
-bar > R << LL |
-end > R << LL
