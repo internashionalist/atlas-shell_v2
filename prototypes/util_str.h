@@ -14,5 +14,6 @@ void strmem_init(char **buffer, int size, int value);
 char *str_strip(char *text);
 void wipe_tokens(char **tokens);
 char *str_duptok(char *text, char *delims);
+char *remove_comment(char *text, char *comment);
 
 #endif /* _CHEPE_STR_ */

@@ -9,7 +9,6 @@ char *_which(char *basename)
 	char **paths, *fullpath, *pathenv, *mailback = NULL;
 	int p = 0;
 
-
 	if (is_pathed(basename))
 		return (str_dup(basename));
 

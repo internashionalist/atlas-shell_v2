@@ -18,8 +18,18 @@ void str_paste(char **dest, const char *source)
 {
 	int len = str_len(source);
 
-	for (int c = 0; c <= len; c++)
+	for (int c = 0; c < len; c++)
 		(*dest)[c] = source[c];
+
+	(*dest)[len] = '\0';
+}
+
+void strmem_init(char **buffer, int size, int value)
+{
+	int index;
+
+	for (index = 0; index < size; index++)
+		(*buffer)[index] = value;
 }
 
 char *str_dup(const char *source)
@@ -72,6 +82,16 @@ int str_nmatch(const char *txt_a, const char *txt_b, int n)
 	return (1);
 }
 
+char *str_duptok(char *text, char *delims)
+{
+	char *tok;
+
+	tok = strtok(text, delims);
+	tok = str_dup(tok);
+
+	return (tok);
+}
+
 char **tokenize(char *text, char *delims, int limit)
 {
 	char **tokens = malloc(sizeof(void *) * limit);
@@ -109,14 +129,6 @@ char *str_ncopy(const char *text, int n)
 	return (copy);
 }
 
-void strmem_init(char **buffer, int size, int value)
-{
-	int index;
-
-	for (index = 0; index < size; index++)
-		(*buffer)[index] = value;
-}
-
 void strmem_realloc(char *buffer, int add)
 {
 	int len;
@@ -136,18 +148,20 @@ char *str_strip(char *text)
 	int w = 0;
 	char **words, *sentence, *whitespace = " \t\n";
 
-	text = str_dup(text);
-	words = tokenize(text, whitespace, 2048);
+	/* prepare memory */
 	sentence = malloc(sizeof(char)* 1);
 	strmem_init(&sentence, 1, 0);
-	while (words[w + 1] != NULL)
+
+	/* create and break duplicate at whitespaces */
+	text = str_dup(text);
+	words = tokenize(text, whitespace, 2048);
+	while (words[w] != NULL)
 	{
-		sentence = str_cat(sentence, words[w]);
-		sentence = str_cat(sentence, " ");
+		/* reconstruct with collapsed whitespace */
+		if ((sentence = str_cat(sentence, words[w])))
+			sentence = str_cat(sentence, " ");
 		w++;
 	}
-
-	sentence = str_cat(sentence, words[w]);
 
 	free(text);
 	free(words);
@@ -155,14 +169,17 @@ char *str_strip(char *text)
 	return (sentence);
 }
 
-char *str_duptok(char *text, char *delims)
+char *remove_comment(char *text, char *comment)
 {
-	char *tok;
+	/* line is a comment */
+	for (int c = 0; comment[c] != '\0'; c++)
+		if (comment[c] == text[0])
+			return (NULL);
 
-	tok = strtok(text, delims);
-	tok = str_dup(tok);
-
-	return (tok);
+	/* extract non-comment slice*/
+	text = str_dup(text);
+	text = strtok(text, comment);
+	return (text);
 }
 
 char *read_line(char *text)
