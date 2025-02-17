@@ -56,9 +56,6 @@ void exit_shell(char **input_tokens)
         status = (status % 256 + 256) % 256; /* limit to 0-255 */
     }
 
-    for (int i = 0; input_tokens[i]; i++) /* free each token */
-        free(input_tokens[i]);
-
     free(input_tokens); /* free array */
 
     exit(status);
