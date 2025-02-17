@@ -12,12 +12,11 @@
 #include "util_path.h"
 #include "util_parser.h"
 
-#define OUTEND 0
-#define INEND  1
+#define READ_END  0
+#define WRITE_END 1
 
 /* int run_piped_cmds(char *cmdout, char *cmdin) */
 /* int setup_cmd_chain(char *first, char *second, int sep) */
-/* void run_cmd(); */
 /* int run_separ(char *cmd, int sep) */
 /* void proc_separs(char **cmds, int (*separators)[]) */
 
@@ -43,19 +42,37 @@ char **get_cmd(char *cmd, char **cmdpath)
 	return (cmd_tokens);
 }
 
-void run_cmd(char *cmdpath, char **cmd_tokens)
+void run_cmd(char *cmdpath, char **cmd_tokens, int code)
 {
-	int wstatus;
+	/* int wstatus; */
+	int linker[2];
+	static int readin = STDIN_FILENO;
+	static int writeout = STDOUT_FILENO;
+
+	pipe(linker);
+	if (code == BAR)
+		writeout = linker[WRITE_END];
+	else
+		writeout = STDOUT_FILENO;
 
 	switch (fork())
 	{
 		case -1:
 			return;
 		case 0:
-			execve(cmdpath, cmd_tokens, NULL);
+			close(linker[READ_END]);
+			dup2(readin, STDIN_FILENO);
+			dup2(writeout, STDOUT_FILENO);
+			execve(cmdpath, cmd_tokens, environ);
 			return;
 		default:
-			wait(&wstatus);
+			close(linker[WRITE_END]);
+			if (readin != STDIN_FILENO)
+				close(readin);
+			if (code == BAR)
+				readin = linker[READ_END];
+			else
+				readin = STDIN_FILENO;
 	}
 }
 
@@ -131,25 +148,28 @@ int proc_cmds(char *line)
 	{
 		cmd = str_dup(separ);
 
-		/* BACK-COMMENT */
 		/* separ = str_dup(separ); */
 		/* cmd = get_redirection(separ, &red); */
 		/* cmd = str_dup(cmd); */
+
 		/* do { */
 		/* 	if (red > -1 ) */
 		/* 		setup_redir(filename, &fdesc, red); */
 		/* } while ((filename = get_redirection(separ, &red))); */
 
 		cmd_tokens = get_cmd(cmd, &cmdpath);
-		run_cmd(cmdpath, cmd_tokens);
+		run_cmd(cmdpath, cmd_tokens, sep);
 
 		if (fdesc > -1)
 			close(fdesc);
+
 		free(cmd);
 		free(cmdpath);
 		free(cmd_tokens);
 		/* free(separ); */
 	}
+
+	wait(NULL);
 
 	return (0);
 }

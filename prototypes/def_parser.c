@@ -173,6 +173,7 @@ char *get_separation(const char *line, int *sep)
 		free(copy);
 		copy = NULL;
 		pos = 0;
+		/* *sep = -1; */
 	}
 
 	return (separation);
