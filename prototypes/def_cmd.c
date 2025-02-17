@@ -124,16 +124,21 @@ int proc_cmds(char *line)
 	char *separ, *filename, *cmd, **cmd_tokens, *cmdpath;
 	int sep, red, fdesc = -1;
 
+	(void) filename;
+	(void) red;
+
 	while ((separ = get_separation(line, &sep)))
 	{
-		separ = str_dup(separ);
-		cmd = get_redirection(separ, &red);
-		cmd = str_dup(cmd);
+		cmd = str_dup(separ);
 
-		do {
-			if (red > -1 )
-				setup_redir(filename, &fdesc, red);
-		} while ((filename = get_redirection(separ, &red)));
+		/* BACK-COMMENT */
+		/* separ = str_dup(separ); */
+		/* cmd = get_redirection(separ, &red); */
+		/* cmd = str_dup(cmd); */
+		/* do { */
+		/* 	if (red > -1 ) */
+		/* 		setup_redir(filename, &fdesc, red); */
+		/* } while ((filename = get_redirection(separ, &red))); */
 
 		cmd_tokens = get_cmd(cmd, &cmdpath);
 		run_cmd(cmdpath, cmd_tokens);
@@ -143,7 +148,7 @@ int proc_cmds(char *line)
 		free(cmd);
 		free(cmdpath);
 		free(cmd_tokens);
-		free(separ);
+		/* free(separ); */
 	}
 
 	return (0);
