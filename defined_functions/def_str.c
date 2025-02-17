@@ -19,7 +19,7 @@ void str_paste(char **dest, const char *source)
 	(*dest)[c] = '\0';
 }
 
-char *str_dup(const char *source)
+char *_strdup(const char *source)
 {
 	int len = 0;
 	char *duplet;
@@ -180,12 +180,12 @@ char *_strdup(const char *str)
 }
 
 /*
- * str_len - returns the length of a string
+ * _strlen - returns the length of a string
  * @text: string to measure
  *
  * Return: length of string
  */
-int str_len(const char *text)
+int _strlen(const char *text)
 {
 	int len = 0;
 

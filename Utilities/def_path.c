@@ -33,7 +33,7 @@ char *navigate_path()
 		 * duplicate, subsequent calls are impossible
 		 */
 		pathvar = _getenv("PATH");
-		pathvar = str_dup(pathvar);
+		pathvar = _strdup(pathvar);
 		paths = tokenize(pathvar, "=:", 64);
 	}
 

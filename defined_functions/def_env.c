@@ -72,7 +72,7 @@ int _getenvid(const char *name)
 
 	name_eq = str_concat(name, "=");
 
-	len = str_len(name_eq);
+	len = _strlen(name_eq);
 
 	while (environ[index] != NULL)
 	{
@@ -136,7 +136,7 @@ void init_env(void)
 
 		for (int v = 0; v < len; v++)
 		{
-			varval = str_dup(environ[v]);
+			varval = _strdup(environ[v]);
 			local_env[v] = varval;
 		}
 		local_env[len] = NULL;
