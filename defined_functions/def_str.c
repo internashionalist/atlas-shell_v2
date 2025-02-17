@@ -24,10 +24,16 @@ char *str_dup(const char *source)
 	int len = 0;
 	char *duplet;
 
+	if (!source)
+		return (NULL);
+
 	while (source[len] != '\0')
 		len++;
 
 	duplet = malloc(sizeof(char) * (len + 1));
+	if (!duplet)
+		return (NULL);
+
 	str_paste(&duplet, source);
 
 	return (duplet);

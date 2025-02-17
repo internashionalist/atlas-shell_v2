@@ -3,7 +3,7 @@
 #include "util_str.h"
 #include "util_env.h"
 
-
+static char **local_env = NULL;
 
 /******** INTERNAL ********/
 
@@ -118,15 +118,13 @@ char **reset_env(void)
 	char **old = environ;
 
 	environ = stash_env(NULL);
-
 	wipe_env(old);
-
+	local_env = NULL;
 	return (environ);
 }
 
 void init_env(void)
 {
-	static char **local_env = NULL;
 	char *varval = NULL;
 	int len = env_length();
 
