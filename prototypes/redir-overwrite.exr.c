@@ -14,7 +14,6 @@ int main(int c, char **args)
 	int fdesc;
 	int fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP; /* rw-rw---- */
 
-
 	if (c < 2)
 		return (EINVAL);
 
