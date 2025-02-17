@@ -182,29 +182,32 @@ char *get_redirection(const char *line, int *redir)
 {
 	static int pos = 0;
 	static char *copy = NULL;
-	static int offset = -1;
+	static int delay = -1;
 	int hold;
 	char *redirection;
 
+	/* create new string at updated position */
 	free(copy);
 	copy = str_dup(&(line[pos]));
 
+	/* get the next next token and update values */
 	redirection = get_partition(copy, &pos, redir, REDIR);
 
 	if (!redirection)
 	{
+		/* last item extracted; reset values */
 		free(copy);
 		copy = NULL;
 		pos = 0;
-		offset = -1;
-		/* return early to avoid reassigning offset */
-		return (NULL);
+		delay = -1;
 	}
-
-	/* delay return of redir to next call */
-	hold = *redir;
-	*redir = offset;
-	offset = hold;
+	else
+	{
+		/* delay return of redir to next call */
+		hold = *redir;
+		*redir = delay;
+		delay = hold;
+	}
 
 	return (redirection);
 }
