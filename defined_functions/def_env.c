@@ -1,8 +1,8 @@
-#include "_util_str.h"
-#include "util_str.h"
-#include "util_env.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "util_str.h"
+#include "util_env.h"
+
 
 
 /******** INTERNAL ********/
@@ -72,7 +72,7 @@ int _getenvid(const char *name)
 
 	name_eq = str_concat(name, "=");
 
-	len = my_strlen(name_eq);
+	len = str_len(name_eq);
 
 	while (environ[index] != NULL)
 	{
@@ -113,7 +113,7 @@ void append_env(char *varval)
 
 /******** EXPOSED ********/
 
-char **reset_env()
+char **reset_env(void)
 {
 	char **old = environ;
 
@@ -145,12 +145,12 @@ void init_env(void)
 	}
 }
 
-void print_env()
+void print_env(void)
 {
 	int i = 0;
 	while (environ[i] != NULL)
 	{
-		printf("[%d] %s\n", i, environ[i]);
+		printf("%s\n", environ[i]);
 		i++;
 	}
 }
