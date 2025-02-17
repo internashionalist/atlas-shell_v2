@@ -6,6 +6,7 @@ extern char **environ;
 void init_env(void);
 char **reset_env(void);
 void print_env(void);
+void wipe_env(char **env);
 
 char *_getenv(const char *name);
 int _setenv(const char *name, const char *value, int overwrite);

@@ -38,7 +38,7 @@ char **tokenize(char *text, char *delims, int limit)
 	char **tokens = malloc(sizeof(void *) * limit);
 	char *tok;
 
-	tok = strtok(text, delims); /* strtok "consumes" strings */
+	tok = strtok(text, delims);
 
 	int i = 0;
 	do {
@@ -48,7 +48,7 @@ char **tokenize(char *text, char *delims, int limit)
 
 	tokens[i] = NULL;
 
-	free(tok);
+	/* removed free(tok) - not dynamicallyk allocated */
 	return (tokens);
 }
 
@@ -75,7 +75,9 @@ char *str_concat(const char *pre, const char *post)
 	while (post[b] != '\0')
 		b++;
 
-	concat = malloc(sizeof(concat) * (a + b));
+	concat = malloc((a + b + 1) * sizeof(char)); /* both str + NULL */
+	if (!concat)
+		return (NULL);
 	str_paste(&concat, pre);
 
 	tail = &concat[a];

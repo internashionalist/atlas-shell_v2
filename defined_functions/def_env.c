@@ -132,7 +132,7 @@ void init_env(void)
 
 	if (!local_env)
 	{
-		local_env = malloc(sizeof(char **) * (len + 1));
+		local_env = malloc(sizeof(char *) * (len + 1));
 
 		for (int v = 0; v < len; v++)
 		{

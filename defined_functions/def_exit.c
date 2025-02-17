@@ -15,7 +15,10 @@ void exit_shell(char **input_tokens)
     int status = 0;
 
     if (input_tokens[1])
-        status = _atoi(input_tokens[1]) % 256; 
+        status = _atoi(input_tokens[1]) % 256;
+    
+    if (input_tokens)
+        free(input_tokens);
 
     exit(status);
 }

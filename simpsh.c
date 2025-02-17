@@ -98,15 +98,19 @@ int main(void)
 		}
 		else
 		{
+			char *cmd_cpy = str_dup(input_tokens[0]); /* copy before procs */
 			int status = process_cmd(input_tokens); /* process command */
 			if (status == -1)
 				printf("Command not found: %s\n", input_tokens[0]);
+			free(cmd_cpy);
 		}
 
 		free(input_tokens);
 	}
 
 	reset_env();
+
 	free(inputline);
+
 	return (0);
 }
