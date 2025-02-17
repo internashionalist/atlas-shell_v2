@@ -186,7 +186,7 @@ char *get_redirection(const char *line, int *redir)
 	int hold;
 	char *redirection;
 
-	/* create new string at updated position */
+	/* free previous string and create a new one from the  updated position */
 	free(copy);
 	copy = str_dup(&(line[pos]));
 
@@ -203,7 +203,7 @@ char *get_redirection(const char *line, int *redir)
 	}
 	else
 	{
-		/* delay return of redir to next call */
+		/* delay update of redir to next call */
 		hold = *redir;
 		*redir = delay;
 		delay = hold;

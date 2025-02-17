@@ -106,6 +106,19 @@ void setup_redir(char *filename, int *fdesc, int code)
 	free(filename);
 }
 
+int determine_logic(int code, int composite, int last)
+{
+       switch (code)
+       {
+       case (BBAR):
+               return (composite || last);
+       case (AAND):
+               return (composite && last);
+       default:
+               return (last);
+       }
+}
+
 int proc_cmds(char *line)
 {
 	char *separ, *filename, *cmd, **cmd_tokens, *cmdpath;
@@ -125,7 +138,8 @@ int proc_cmds(char *line)
 		cmd_tokens = get_cmd(cmd, &cmdpath);
 		run_cmd(cmdpath, cmd_tokens);
 
-		close(fdesc);
+		if (fdesc > -1)
+			close(fdesc);
 		free(cmd);
 		free(cmdpath);
 		free(cmd_tokens);
