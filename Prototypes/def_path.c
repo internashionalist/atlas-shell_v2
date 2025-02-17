@@ -19,7 +19,7 @@ char *navigate_path()
 		 * duplicate, subsequent calls are impossible
 		 */
 		pathvar = _getenv("PATH");
-		pathvar = str_dup(pathvar);
+		pathvar = _strdup(pathvar);
 		paths = tokenize(pathvar, "=:", 64);
 	}
 
@@ -59,7 +59,7 @@ linked_path *init_path_chain()
 		*next = NULL;
 	char *path = navigate_path();
 
-	head->path = str_dup(path);
+	head->path = _strdup(path);
 	head->prev = NULL;
 	head->next = NULL;
 	prev = head;
@@ -67,7 +67,7 @@ linked_path *init_path_chain()
 	while ((path = navigate_path()))
 	{
 		next = malloc(sizeof(linked_path));
-		next->path = str_dup(path);
+		next->path = _strdup(path);
 		next->prev = prev;
 		next->next = NULL;
 

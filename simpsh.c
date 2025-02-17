@@ -18,7 +18,7 @@ int process_cmd(char **input_tokens)
 	if (command[0] == '.' || command[0] == '/') /* absolute PATH */
 	{
 		if (access(command, X_OK) == 0) /* check if executable */
-			fullpath = str_dup(command);
+			fullpath = _strdup(command);
 		else
 			return (-1);
 	}
@@ -98,15 +98,19 @@ int main(void)
 		}
 		else
 		{
+			char *cmd_cpy = _strdup(input_tokens[0]); /* copy before procs */
 			int status = process_cmd(input_tokens); /* process command */
 			if (status == -1)
 				printf("Command not found: %s\n", input_tokens[0]);
+			free(cmd_cpy);
 		}
 
 		free(input_tokens);
 	}
 
 	reset_env();
+	environ = NULL;
 	free(inputline);
+
 	return (0);
 }

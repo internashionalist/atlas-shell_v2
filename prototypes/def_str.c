@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int str_len(const char *text)
+int _strlen(const char *text)
 {
 	int len = 0;
 
@@ -17,16 +17,16 @@ int str_len(const char *text)
 
 void str_paste(char **dest, const char *source)
 {
-	int len = str_len(source);
+	int len = _strlen(source);
 
 	for (int c = 0; c <= len; c++)
 		(*dest)[c] = source[c];
 }
 
-char *str_dup(const char *source)
+char *_strdup(const char *source)
 {
 	char *duplet;
-	int len = str_len(source);
+	int len = _strlen(source);
 
 	duplet = malloc(sizeof(char) * (len + 1));
 	str_paste(&duplet, source);
@@ -39,8 +39,8 @@ char *str_concat(const char *prefix, const char *suffix)
 	int a = 0, b = 0;
 	char *concat, *tail;
 
-	a = str_len(prefix);
-	b = str_len(suffix);
+	a = _strlen(prefix);
+	b = _strlen(suffix);
 
 	concat = malloc(sizeof(char) * (a + b + 1));
 	str_paste(&concat, prefix);
