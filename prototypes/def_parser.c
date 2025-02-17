@@ -182,6 +182,8 @@ char *get_redirection(const char *line, int *redir)
 {
 	static int pos = 0;
 	static char *copy = NULL;
+	static int offset = -1;
+	int hold;
 	char *redirection;
 
 	free(copy);
@@ -194,7 +196,15 @@ char *get_redirection(const char *line, int *redir)
 		free(copy);
 		copy = NULL;
 		pos = 0;
+		offset = -1;
+		/* return early to avoid reassigning offset */
+		return (NULL);
 	}
+
+	/* delay return of redir to next call */
+	hold = *redir;
+	*redir = offset;
+	offset = hold;
 
 	return (redirection);
 }

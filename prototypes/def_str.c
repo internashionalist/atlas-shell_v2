@@ -155,13 +155,15 @@ char *str_strip(char *text)
 	/* create and break duplicate at whitespaces */
 	text = str_dup(text);
 	words = tokenize(text, whitespace, 2048);
-	while (words[w] != NULL)
+
+	/* reconstruct with collapsed whitespace */
+	while (words[w + 1] != NULL)
 	{
-		/* reconstruct with collapsed whitespace */
-		if ((sentence = str_cat(sentence, words[w])))
-			sentence = str_cat(sentence, " ");
+		sentence = str_cat(sentence, words[w]);
+		sentence = str_cat(sentence, " ");
 		w++;
 	}
+	sentence = str_cat(sentence, words[w]);
 
 	free(text);
 	free(words);
