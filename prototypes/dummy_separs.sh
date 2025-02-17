@@ -1,3 +1,4 @@
-cat -n _which.c && ls -l -a .. | echo hello world!
-pwd;  git status -s  --show-stash || echo hello again!
-grep malloc def_str.c
+echo hello ; echo hello | rev;
+echo hello reverse! | rev; echo hello again! ; echo goodbye reverse! | rev
+ls -l | rev
+cat -n _which.c | rev | wc

@@ -66,6 +66,7 @@ void run_cmd(char *cmdpath, char **cmd_tokens, int code)
 			execve(cmdpath, cmd_tokens, environ);
 			return;
 		default:
+			wait(NULL);
 			close(linker[WRITE_END]);
 			if (readin != STDIN_FILENO)
 				close(readin);
@@ -168,8 +169,6 @@ int proc_cmds(char *line)
 		free(cmd_tokens);
 		/* free(separ); */
 	}
-
-	wait(NULL);
 
 	return (0);
 }
