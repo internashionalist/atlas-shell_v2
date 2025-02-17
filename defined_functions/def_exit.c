@@ -17,8 +17,10 @@ void exit_shell(char **input_tokens)
     if (input_tokens[1])
         status = _atoi(input_tokens[1]) % 256;
     
-    if (input_tokens)
-        free(input_tokens);
+    for (int i = 0; input_tokens[i]; i++)
+        free(input_tokens[i]);
+
+    free(input_tokens);
 
     exit(status);
 }

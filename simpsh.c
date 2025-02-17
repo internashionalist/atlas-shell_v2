@@ -109,6 +109,7 @@ int main(void)
 	}
 
 	reset_env();
+	environ = NULL;
 	free(inputline);
 
 	return (0);
