@@ -19,26 +19,6 @@ void str_paste(char **dest, const char *source)
 	(*dest)[c] = '\0';
 }
 
-char *_strdup(const char *source)
-{
-	int len = 0;
-	char *duplet;
-
-	if (!source)
-		return (NULL);
-
-	while (source[len] != '\0')
-		len++;
-
-	duplet = malloc(sizeof(char) * (len + 1));
-	if (!duplet)
-		return (NULL);
-
-	str_paste(&duplet, source);
-
-	return (duplet);
-}
-
 char **tokenize(char *text, char *delims, int limit)
 {
 	char **tokens = malloc(sizeof(void *) * limit);
