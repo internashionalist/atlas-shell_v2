@@ -15,11 +15,6 @@
 #define READ_END  0
 #define WRITE_END 1
 
-/* int run_piped_cmds(char *cmdout, char *cmdin) */
-/* int setup_cmd_chain(char *first, char *second, int sep) */
-/* int run_separ(char *cmd, int sep) */
-/* void proc_separs(char **cmds, int (*separators)[]) */
-
 void proc_redirs(char **cmd, int (*redirectors)[])
 {
 	char *redir;
@@ -130,23 +125,23 @@ void setup_redir(char *filename, int *fdesc, int code)
 	free(filename);
 }
 
-int determine_logic(int code, int composite, int last)
+int update_logic(int operand, int logic, int cmdexit)
 {
-       switch (code)
+       switch (operand)
        {
        case (BBAR):
-               return (composite || last);
+               return (logic || cmdexit);
        case (AAND):
-               return (composite && last);
+               return (logic && cmdexit);
        default:
-               return (last);
+               return (cmdexit);
        }
 }
 
 int proc_cmds(char *line)
 {
 	char *separ, *filename, *cmd, **cmd_tokens, *cmdpath;
-	int sep, red, fdesc = -1;
+	int sep, red, fdesc = -1, logic, cmdexit;
 
 	while ((separ = get_separation(line, &sep)))
 	{
@@ -161,7 +156,8 @@ int proc_cmds(char *line)
 		} while ((filename = get_redirection(separ, &red)));
 
 		cmd_tokens = get_cmd(cmd, &cmdpath);
-		run_cmd(cmdpath, cmd_tokens, sep);
+		cmdexit = run_cmd(cmdpath, cmd_tokens, sep);
+		logic = update_logic(sep, logic, cmdexit);
 
 		if (fdesc > -1)
 			close(fdesc);
