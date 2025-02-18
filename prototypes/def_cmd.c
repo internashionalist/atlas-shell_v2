@@ -15,18 +15,6 @@
 #define READ_END  0
 #define WRITE_END 1
 
-void proc_redirs(char **cmd, int (*redirectors)[])
-{
-	char *redir;
-
-	printf("\t%s\n", cmd[0]);
-	for (int r = 1; cmd[r] != NULL; r++)
-	{
-		redir = get_redir_str((*redirectors)[r]);
-		printf("\t%s %s\n", redir, cmd[r]);
-	}
-}
-
 char **get_cmd(char *cmd, char **cmdpath)
 {
 	char **cmd_tokens;
@@ -37,15 +25,15 @@ char **get_cmd(char *cmd, char **cmdpath)
 	return (cmd_tokens);
 }
 
-int run_cmd(char *cmdpath, char **cmd_tokens, int code)
+int run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 {
-	int wstatus;
-	int linker[2];
+	int wstatus, writeout, linker[2];
 	static int readin = STDIN_FILENO;
-	static int writeout = STDOUT_FILENO;
 
 	pipe(linker);
-	if (code == BAR)
+	if (fdesc != STDOUT_FILENO)
+		writeout = fdesc;
+	else if (code == BAR)
 		writeout = linker[WRITE_END];
 	else
 		writeout = STDOUT_FILENO;
@@ -62,7 +50,8 @@ int run_cmd(char *cmdpath, char **cmd_tokens, int code)
 			return (0);
 		default:
 			wait(&wstatus);
-			close(linker[WRITE_END]);
+			if (writeout != STDOUT_FILENO)
+				close(writeout);
 			if (readin != STDIN_FILENO)
 				close(readin);
 			if (code == BAR)
@@ -79,24 +68,11 @@ int run_cmd(char *cmdpath, char **cmd_tokens, int code)
 	return (wstatus);
 }
 
-void print_cmd(char *cmdpath, char **cmd_array)
-{
-	int i = 1;
-
-	printf("\n");
-	printf("<%s> ", cmdpath);
-	while (cmd_array[i] != NULL)
-	{
-		printf("<%s> ", cmd_array[i]);
-		i++;
-	}
-}
-
 int redir_left(char *filename, int append)
 {
 	int fdesc;
 	int fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
-	int fflags = O_CREAT | O_WRONLY | append;
+	int fflags = O_CREAT | /*O_CLOEXEC |*/ O_WRONLY | append;
 
 	fdesc = open(filename, fflags, fmode);
 
@@ -105,24 +81,28 @@ int redir_left(char *filename, int append)
 	return (fdesc);
 }
 
-void setup_redir(char *filename, int *fdesc, int code)
+int setup_redir(char *filename, int fdesc, int code)
 {
-	if (*fdesc > -1)
-		close(*fdesc);
+	if (fdesc != STDOUT_FILENO)
+		close(fdesc);
 
 	filename = str_strip(filename);
 
 	switch (code)
 	{
 	case (LOUT):
-		*fdesc = redir_left(filename, 0);
+		fdesc = redir_left(filename, 0);
 		break;
 	case (LLOUT):
-		*fdesc = redir_left(filename, O_APPEND);
+		fdesc = redir_left(filename, O_APPEND);
 		break;
+	default:
+		fdesc = -1;
 	}
 
 	free(filename);
+
+	return (fdesc);
 }
 
 int update_logic(int operand, int logic, int cmdexit)
@@ -140,27 +120,27 @@ int update_logic(int operand, int logic, int cmdexit)
 
 int proc_cmds(char *line)
 {
-	char *separ, *filename, *cmd, **cmd_tokens, *cmdpath;
+	char *separ, *filename = NULL, *cmd, **cmd_tokens, *cmdpath;
 	int sep, red, fdesc = -1, logic, cmdexit;
+
+	(void) cmdexit;
+	(void) logic;
 
 	while ((separ = get_separation(line, &sep)))
 	{
-
+		fdesc = STDOUT_FILENO;
 		separ = str_dup(separ);
 		cmd = get_redirection(separ, &red);
 		cmd = str_dup(cmd);
 
 		do {
 			if (red > -1 )
-				setup_redir(filename, &fdesc, red);
+				fdesc = setup_redir(filename, fdesc, red);
 		} while ((filename = get_redirection(separ, &red)));
 
 		cmd_tokens = get_cmd(cmd, &cmdpath);
-		cmdexit = run_cmd(cmdpath, cmd_tokens, sep);
-		logic = update_logic(sep, logic, cmdexit);
-
-		if (fdesc > -1)
-			close(fdesc);
+		cmdexit = run_cmd(cmdpath, cmd_tokens, sep, fdesc);
+		/* logic = update_logic(sep, logic, cmdexit); */
 
 		free(cmd);
 		free(cmdpath);
