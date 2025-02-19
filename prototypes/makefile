@@ -19,7 +19,7 @@ all: pid ppid noargc readline splitter execve forker wait five stat envmain $\
 interpreter:
 	clear
 	${CCMD} ${UTILS} interpretor.test.c -o interpreter.exec
-	${MEMTEST} ./interpreter.exec ./dummy_separs.sh
+	${MEMTEST} ./interpreter.exec ./dummy_logic.sh
 
 prepipe:
 	${CCMD} pipe-pre.c -o prepipe.exec

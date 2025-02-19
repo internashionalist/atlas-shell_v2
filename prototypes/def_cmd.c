@@ -60,8 +60,8 @@ int run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 				readin = STDIN_FILENO;
 	}
 
-	if (WIFEXITED(wstatus))
-		wstatus = WEXITSTATUS(wstatus);
+	if (WIFEXITED(wstatus) && !WEXITSTATUS(wstatus))
+		wstatus = 1;
 	else
 		wstatus = 0;
 
@@ -75,6 +75,8 @@ int redir_left(char *filename, int append)
 	int fflags = O_CREAT | /*O_CLOEXEC |*/ O_WRONLY | append;
 
 	fdesc = open(filename, fflags, fmode);
+	/* fcntl(fdesc, F_SETFD, FD_CLOEXEC); */
+	/* fdesc = fcntl(fdesc, F_DUPFD_CLOEXEC); */
 
 	dup2(fdesc, STDOUT_FILENO);
 
@@ -105,26 +107,26 @@ int setup_redir(char *filename, int fdesc, int code)
 	return (fdesc);
 }
 
-int update_logic(int operand, int logic, int cmdexit)
+int resolve_logic(int cmdexit, int operand)
 {
-       switch (operand)
-       {
-       case (BBAR):
-               return (logic || cmdexit);
-       case (AAND):
-               return (logic && cmdexit);
-       default:
-               return (cmdexit);
-       }
+	switch (operand)
+	{
+	case (BBAR):
+		if (cmdexit)
+			return (1);
+		break;
+	case (AAND):
+		if (!cmdexit)
+			return (1);
+		break;
+	}
+	return (0);
 }
 
 int proc_cmds(char *line)
 {
 	char *separ, *filename = NULL, *cmd, **cmd_tokens, *cmdpath;
-	int sep, red, fdesc = -1, logic, cmdexit;
-
-	(void) cmdexit;
-	(void) logic;
+	int sep, red, fdesc = -1, cmdexit, skip = 0;
 
 	while ((separ = get_separation(line, &sep)))
 	{
@@ -139,8 +141,11 @@ int proc_cmds(char *line)
 		} while ((filename = get_redirection(separ, &red)));
 
 		cmd_tokens = get_cmd(cmd, &cmdpath);
-		cmdexit = run_cmd(cmdpath, cmd_tokens, sep, fdesc);
-		/* logic = update_logic(sep, logic, cmdexit); */
+
+		if (!skip)
+			cmdexit = run_cmd(cmdpath, cmd_tokens, sep, fdesc);
+
+		skip = resolve_logic(cmdexit, sep);
 
 		free(cmd);
 		free(cmdpath);
