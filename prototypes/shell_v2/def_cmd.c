@@ -5,17 +5,16 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h> /* file mode_t defs */
-#include "util_str.h"
-#include "util_cmd.h"
-#include "util_which.h"
-#include "util_env.h"
-#include "util_path.h"
-#include "util_parser.h"
+#include "dec_str.h"
+#include "dec_which.h"
+#include "dec_env.h"
+#include "dec_path.h"
+#include "dec_parser.h"
 
 #define READ_END  0
 #define WRITE_END 1
 
-char **get_cmd(char *cmd, char **cmdpath)
+char **_get_cmd(char *cmd, char **cmdpath)
 {
 	char **cmd_tokens;
 
@@ -25,7 +24,7 @@ char **get_cmd(char *cmd, char **cmdpath)
 	return (cmd_tokens);
 }
 
-int run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
+int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 {
 	int wstatus, writeout, linker[2];
 	static int readin = STDIN_FILENO;
@@ -68,7 +67,7 @@ int run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 	return (wstatus);
 }
 
-int redir_left(char *filename, int append)
+int _redir_left(char *filename, int append)
 {
 	int fdesc;
 	int fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
@@ -83,7 +82,7 @@ int redir_left(char *filename, int append)
 	return (fdesc);
 }
 
-int setup_redir(char *filename, int fdesc, int code)
+int _setup_redir(char *filename, int fdesc, int code)
 {
 	if (fdesc != STDOUT_FILENO)
 		close(fdesc);
@@ -93,10 +92,10 @@ int setup_redir(char *filename, int fdesc, int code)
 	switch (code)
 	{
 	case (LOUT):
-		fdesc = redir_left(filename, 0);
+		fdesc = _redir_left(filename, 0);
 		break;
 	case (LLOUT):
-		fdesc = redir_left(filename, O_APPEND);
+		fdesc = _redir_left(filename, O_APPEND);
 		break;
 	default:
 		fdesc = -1;
@@ -107,7 +106,7 @@ int setup_redir(char *filename, int fdesc, int code)
 	return (fdesc);
 }
 
-int resolve_logic(int cmdexit, int operand)
+int _resolve_logic(int cmdexit, int operand)
 {
 	switch (operand)
 	{
@@ -137,15 +136,15 @@ int proc_cmds(char *line)
 
 		do {
 			if (red > -1 )
-				fdesc = setup_redir(filename, fdesc, red);
+				fdesc = _setup_redir(filename, fdesc, red);
 		} while ((filename = get_redirection(separ, &red)));
 
-		cmd_tokens = get_cmd(cmd, &cmdpath);
+		cmd_tokens = _get_cmd(cmd, &cmdpath);
 
 		if (!skip)
-			cmdexit = run_cmd(cmdpath, cmd_tokens, sep, fdesc);
+			cmdexit = _run_cmd(cmdpath, cmd_tokens, sep, fdesc);
 
-		skip = resolve_logic(cmdexit, sep);
+		skip = _resolve_logic(cmdexit, sep);
 
 		free(cmd);
 		free(cmdpath);

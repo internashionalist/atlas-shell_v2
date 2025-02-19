@@ -1,6 +1,6 @@
 #ifndef _CMDS_
 #define _CMDS_
 
-/* #define MAX_CMDS 2048 */
+int proc_cmds(char *line);
 
 #endif /* _CMDS_ */
