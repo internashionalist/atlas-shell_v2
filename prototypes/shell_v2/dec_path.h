@@ -7,5 +7,6 @@ int is_pathed(char *cmdpath);
 char *navigate_path(void);
 int verify_fullpath(char *fullpath);
 char *build_fullpath(char *dirname, char *filename);
+char *_which(char *basename);
 
 #endif /* _PATH_ */
