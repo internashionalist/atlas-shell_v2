@@ -53,18 +53,6 @@ char **extend_env(char **env, int add)
 	return (new_env);
 }
 
-void wipe_env(char **env)
-{
-	int v = 0;
-
-	while (env[v] != NULL)
-	{
-		free(env[v]);
-		v++;
-	}
-	free(env);
-}
-
 int _getenvid(const char *name)
 {
 	int len = 0, index = 0;
@@ -203,4 +191,16 @@ int _unsetenv(const char *name)
 	}
 
 	return (0);
+}
+
+void wipe_env(char **env)
+{
+	int v = 0;
+
+	while (env[v] != NULL)
+	{
+		free(env[v]);
+		v++;
+	}
+	free(env);
 }
