@@ -1,5 +1,5 @@
-#ifndef _UTIL_ENV_
-#define _UTIL_ENV_
+#ifndef _ENV_
+#define _ENV_
 
 extern char **environ;
 
@@ -12,4 +12,4 @@ char *_getenv(const char *name);
 int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(const char *name);
 
-#endif /* _UTIL_ENV_ */
+#endif /* _ENV_ */

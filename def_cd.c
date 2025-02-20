@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <limits.h>
-#include "util_cd.h"
-#include "util_env.h"
-#include "util_str.h"
+#include "dec_cd.h"
+#include "dec_env.h"
+#include "dec_str.h"
 
 int change_dir(char **tokens)
 {

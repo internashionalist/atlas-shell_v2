@@ -1,5 +1,5 @@
-#ifndef util_cd_h
-#define util_cd_h
+#ifndef _cd_h
+#define _cd_h
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,4 +7,4 @@
 
 int change_dir(char **tokens);
 
-#endif /* util_cd_h */
+#endif /* _cd_h */
