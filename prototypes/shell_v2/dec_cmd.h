@@ -1,6 +1,6 @@
-#ifndef _CMDS_
-#define _CMDS_
+#ifndef _CMD_
+#define _CMD_
 
 int proc_cmds(char *line);
 
-#endif /* _CMDS_ */
+#endif /* _CMD_ */

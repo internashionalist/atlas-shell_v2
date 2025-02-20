@@ -1,6 +1,4 @@
-#ifndef _CMDS_
-#define _CMDS_
+#ifndef _STR_
+#define _STR_
 
-/* #define MAX_CMDS 2048 */
-
-#endif /* _CMDS_ */
+#endif /* _STR_ */

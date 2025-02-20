@@ -1,6 +1,4 @@
-#ifndef _CMDS_
-#define _CMDS_
+#ifndef _WHICH_
+#define _WHICH_
 
-/* #define MAX_CMDS 2048 */
-
-#endif /* _CMDS_ */
+#endif /* _WHICH_ */

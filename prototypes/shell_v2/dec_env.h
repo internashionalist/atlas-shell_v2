@@ -1,6 +1,8 @@
-#ifndef _CMDS_
-#define _CMDS_
+#ifndef _ENV_
+#define _ENV_
 
-/* #define MAX_CMDS 2048 */
+int _unsetenv(const char *name);
+int _setenv(const char *var, const char *val, int overwrite);
+char *_getenv(const char *name);
 
-#endif /* _CMDS_ */
+#endif /* _ENV_ */

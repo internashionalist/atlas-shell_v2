@@ -1,6 +1,4 @@
-#ifndef _CMDS_
-#define _CMDS_
+#ifndef _PATH_
+#define _PATH_
 
-/* #define MAX_CMDS 2048 */
-
-#endif /* _CMDS_ */
+#endif /* _PATH_ */

@@ -1,6 +1,4 @@
-#ifndef _CMDS_
-#define _CMDS_
+#ifndef _PARSER_
+#define _PARSER_
 
-/* #define MAX_CMDS 2048 */
-
-#endif /* _CMDS_ */
+#endif /* _PARSER_ */
