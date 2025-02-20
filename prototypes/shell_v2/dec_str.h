@@ -4,7 +4,7 @@
 char **tokenize(char *text, char *delims, int limit);
 char *str_cat(char *prefix, char *suffix);
 char *str_dup(const char *source);
-char *str_dupcat(char *prefix, const char *suffix);
+char *str_dupcat(const char *prefix, char *suffix);
 char *str_duptok(char *text, char *delims);
 char *str_ncopy(const char *text, int n);
 char *str_strip(char *text);

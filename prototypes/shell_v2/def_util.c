@@ -1,6 +1,7 @@
 #include "dec_path.h"
 #include "dec_util.h"
 #include "dec_parser.h"
+#include "dec_env.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -83,5 +84,15 @@ char *get_sep_str(int code)
 			return ("&&");
 		default:
 			return ("_");
+	}
+}
+
+void print_env()
+{
+	int i = 0;
+	while (environ[i] != NULL)
+	{
+		printf("[%d] %s\n", i, environ[i]);
+		i++;
 	}
 }
