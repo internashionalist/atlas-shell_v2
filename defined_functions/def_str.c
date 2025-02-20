@@ -34,7 +34,7 @@ char **tokenize(char *text, char *delims, int limit)
 
 	tokens[i] = NULL;
 
-	/* removed free(tok) - not dynamicallyk allocated */
+	free(tok);	
 	return (tokens);
 }
 

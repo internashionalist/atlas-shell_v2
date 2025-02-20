@@ -1,20 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "util_str.h"
-#include "Utilities/util_path.h"
-#include "Utilities/util_env.h"
+#include "util_path.h"
+#include "util_env.h"
 
 char *_which(char *basename)
 {
 	char **paths, *fullpath, *pathenv, *mailback = NULL;
 	int p = 0;
 
-
 	if (is_pathed(basename))
-		return (_strdup(basename));
+		return (str_dup(basename));
 
 	pathenv = _getenv("PATH");
-	pathenv = _strdup(pathenv);
+	pathenv = str_dup(pathenv);
 	paths = tokenize(pathenv, "=:", 64);
 
 	while (paths[p] != NULL)
