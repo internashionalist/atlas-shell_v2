@@ -6,7 +6,6 @@
 #include <fcntl.h>
 #include <sys/stat.h> /* file mode_t defs */
 #include "dec_str.h"
-#include "dec_which.h"
 #include "dec_env.h"
 #include "dec_path.h"
 #include "dec_parser.h"
