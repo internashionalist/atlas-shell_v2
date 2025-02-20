@@ -11,6 +11,7 @@ int str_len(const char *text);
 int str_nmatch(const char *txt_a, const char *txt_b, int n);
 void str_paste(char **dest, const char *source);
 int find_string(char **strings, char *str);
+int str_match(char *txt_a, char *txt_b);
 
 void strmem_init(char **buffer, int size, int value);
 void strmem_realloc(char *buffer, int add);

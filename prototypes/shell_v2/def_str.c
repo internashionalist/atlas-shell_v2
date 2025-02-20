@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "dec_parser.h"
+#include "dec_str.h"
 
 int find_string(char **strings, char *str)
 {
@@ -55,7 +57,7 @@ char *str_dup(const char *source)
 }
 
 /*  leaves prefix alone and returns a duplicate concat string*/
-char *str_dupcat(char *prefix, const char *suffix)
+char *str_dupcat(const char *prefix, char *suffix)
 {
 	int a = 0, b = 0;
 	char *concat, *tail;
@@ -79,6 +81,25 @@ char *str_cat(char *prefix, char *suffix)
 	free(prefix);
 
 	return (concat);
+}
+
+int str_match(char *txt_a, char *txt_b)
+{
+	int len_a, len_b, match = 0;
+	char *dup_a, *dup_b;
+
+	dup_a = str_strip(txt_a);
+	dup_b = str_strip(txt_b);
+
+	len_a = str_len(dup_a);
+	len_b = str_len(dup_b);
+
+	if (len_a == len_b)
+		match = str_nmatch(dup_a, dup_b, len_a);
+
+	free(dup_a);
+	free(dup_b);
+	return (match);
 }
 
 int str_nmatch(const char *txt_a, const char *txt_b, int n)
@@ -162,5 +183,3 @@ char *str_strip(char *text)
 
 	return (sentence);
 }
-
-/* MOVE DEFINITIONS OUT */
