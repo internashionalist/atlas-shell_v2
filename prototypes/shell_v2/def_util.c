@@ -1,5 +1,6 @@
 #include "dec_path.h"
 #include "dec_util.h"
+#include "dec_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -49,4 +50,38 @@ int print_fullpath(char *fullpath, struct stat *st)
 		return (-1);
 }
 
+char *get_redir_str(int code)
+{
+	switch (code)
+	{
+		case (LOUT):
+			return (">");
+		case (LLOUT):
+			return (">>");
+		case (RIN):
+			return ("<");
+		case (RRIN):
+			return ("<<");
+		default:
+			return ("_");
+	}
+}
 
+char *get_sep_str(int code)
+{
+	switch (code)
+	{
+		case (SCOL):
+			return (";");
+		case (BAR):
+			return ("|");
+		case (BBAR):
+			return ("||");
+		case (AND):
+			return ("&");
+		case (AAND):
+			return ("&&");
+		default:
+			return ("_");
+	}
+}

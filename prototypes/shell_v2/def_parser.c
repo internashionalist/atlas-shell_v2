@@ -1,22 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "util_parser.h"
-#include "util_str.h"
-#include "util_cmd.h"
+#include "dec_parser.h"
+#include "dec_str.h"
+#include "dec_cmd.h"
 
-int find_string(char **strings, char *str)
-{
-	int index = -1;
-
-	while (strings[index] != NULL)
-		if (strings[index] == str)
-			break;
-
-	return (index);
-}
-
-int check_redir_chars(const char *string, int pos)
+int _check_redir_chars(const char *string, int pos)
 {
 	switch (string[pos])
 	{
@@ -35,7 +24,7 @@ int check_redir_chars(const char *string, int pos)
 	}
 }
 
-int check_sep_chars(const char *string, int pos)
+int _check_sep_chars(const char *string, int pos)
 {
 	switch (string[pos])
 	{
@@ -56,57 +45,21 @@ int check_sep_chars(const char *string, int pos)
 	}
 }
 
-char *get_redir_str(int code)
-{
-	switch (code)
-	{
-		case (LOUT):
-			return (">");
-		case (LLOUT):
-			return (">>");
-		case (RIN):
-			return ("<");
-		case (RRIN):
-			return ("<<");
-		default:
-			return ("_");
-	}
-}
-
-char *get_sep_str(int code)
-{
-	switch (code)
-	{
-		case (SCOL):
-			return (";");
-		case (BAR):
-			return ("|");
-		case (BBAR):
-			return ("||");
-		case (AND):
-			return ("&");
-		case (AAND):
-			return ("&&");
-		default:
-			return ("_");
-	}
-}
-
-int is_double_sep(int symbol)
+int _is_double_sep(int symbol)
 {
 	if (symbol == AAND || symbol == BBAR)
 		return (1);
 	return (0);
 }
 
-int is_double_redir(int symbol)
+int _is_double_redir(int symbol)
 {
 	if (symbol == LLOUT || symbol == RRIN)
 		return (1);
 	return (0);
 }
 
-void setup_partitioner(
+void _setup_partitioner(
 part p,
 int (**char_check)(const char *, int),
 int (**is_double)(int),
@@ -115,19 +68,19 @@ char **delims)
 	switch (p)
 	{
 	case SEPAR:
-		*char_check = check_sep_chars;
-		*is_double = is_double_sep;
+		*char_check = _check_sep_chars;
+		*is_double = _is_double_sep;
 		*delims = ";|&";
 		break;
 	case REDIR:
-		*char_check = check_redir_chars;
-		*is_double = is_double_redir;
+		*char_check = _check_redir_chars;
+		*is_double = _is_double_redir;
 		*delims = "<>";
 		break;
 	}
 }
 
-char *get_partition(char *copy, int *pos, int *sep, part kind)
+char *_get_partition(char *copy, int *pos, int *sep, part kind)
 {
 	char *partition = NULL;
 	char *delims;
@@ -135,7 +88,7 @@ char *get_partition(char *copy, int *pos, int *sep, part kind)
 	int (*is_double)(int);
 	int p = 0;
 
-	setup_partitioner(kind, &char_check, &is_double, &delims);
+	_setup_partitioner(kind, &char_check, &is_double, &delims);
 
 	while (copy[p] != '\0')
 	{
@@ -166,7 +119,7 @@ char *get_separation(const char *line, int *sep)
 	free(copy);
 	copy = str_dup(&(line[pos]));
 
-	separation = get_partition(copy, &pos, sep, SEPAR);
+	separation = _get_partition(copy, &pos, sep, SEPAR);
 
 	if (!separation)
 	{
@@ -192,7 +145,7 @@ char *get_redirection(const char *line, int *redir)
 	copy = str_dup(&(line[pos]));
 
 	/* get the next next token and update values */
-	redirection = get_partition(copy, &pos, redir, REDIR);
+	redirection = _get_partition(copy, &pos, redir, REDIR);
 
 	if (!redirection)
 	{

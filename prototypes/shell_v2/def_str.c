@@ -5,6 +5,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+int find_string(char **strings, char *str)
+{
+	int index = -1;
+
+	while (strings[index] != NULL)
+		if (strings[index] == str)
+			break;
+
+	return (index);
+}
+
 int str_len(const char *text)
 {
 	int c;
