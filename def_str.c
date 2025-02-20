@@ -184,3 +184,55 @@ char *str_strip(char *text)
 
 	return (sentence);
 }
+
+/**
+ * _strcmp - compares two strings char by char
+ * @s1: first string
+ * @s2: you guessed it
+ *
+ * Return: 0 if strings are equal, otherwise the difference
+ */
+int _strcmp(const char *s1, const char *s2)
+{
+	int diff = 0;
+
+	while (1)
+	{
+		/* compute difference between chars */
+		diff = *s1 - *s2;
+
+		/* if end of string or difference is non-zero, break off */
+		if (*s1 == '\0' || *s2 == '\0' || diff != 0)
+			break;
+
+		s1++; /* increment pointers */
+		s2++;
+	}
+
+	return (diff); /* difference between strings */
+}
+
+/**
+ * _strcpy - copies a string from src to dest
+ * @dest: destination buffer
+ * @src: source string
+ *
+ * Return: pointer to dest
+ */
+char *_strcpy(char *dest, const char *src)
+{
+	char *start = dest; /* pointer to start of dest */
+
+	if (!dest || !src) /* check for NULL pointers */
+		return (dest);
+
+	do
+    {
+		*dest = *src; /* copy char from src to dest */
+		dest++;
+	}
+
+    while (*src++ != '\0'); /* formatting seems off */
+
+	return (start); /* gives us a pointer to start of dest */
+}
