@@ -4,27 +4,51 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "dec_parser.h"
+#include "dec_str.h"
 
-void str_paste(char **dest, char *source)
+int find_string(char **strings, char *str)
 {
-	int c = 0;
+	int index = -1;
 
-	while (source[c] != '\0')
-	{
-		(*dest)[c] = source[c];
-		c++;
-	}
+	while (strings[index] != NULL)
+		if (strings[index] == str)
+			break;
 
-	(*dest)[c] = '\0';
+	return (index);
 }
 
-char *str_dup(char *source)
+int str_len(const char *text)
 {
-	int len = 0;
-	char *duplet;
+	int c;
 
-	while (source[len] != '\0')
-		len++;
+	for (c = 0; text[c] != 0; ++c);
+
+	return (c);
+}
+
+void str_paste(char **dest, const char *source)
+{
+	int len = str_len(source);
+
+	for (int c = 0; c < len; c++)
+		(*dest)[c] = source[c];
+
+	(*dest)[len] = '\0';
+}
+
+void strmem_init(char **buffer, int size, int value)
+{
+	int index;
+
+	for (index = 0; index < size; index++)
+		(*buffer)[index] = value;
+}
+
+char *str_dup(const char *source)
+{
+	char *duplet;
+	int len = str_len(source);
 
 	duplet = malloc(sizeof(char) * (len + 1));
 	str_paste(&duplet, source);
@@ -32,23 +56,50 @@ char *str_dup(char *source)
 	return (duplet);
 }
 
-char **tokenize(char *text, char *delims, int limit)
+/*  leaves prefix alone and returns a duplicate concat string*/
+char *str_dupcat(const char *prefix, char *suffix)
 {
-	char **tokens = malloc(sizeof(void *) * limit);
-	char *tok;
+	int a = 0, b = 0;
+	char *concat, *tail;
 
-	tok = strtok(text, delims); /* strtok "consumes" strings */
+	a = str_len(prefix);
+	b = str_len(suffix);
 
-	int i = 0;
-	do {
-		tokens[i] = tok;
-		tok = strtok(NULL, delims);
-	} while ((++i < limit) && (tok != NULL));
+	concat = malloc(sizeof(char) * (a + b + 1));
+	str_paste(&concat, prefix);
+	tail = &(concat[a]);
+	str_paste(&tail, suffix);
 
-	tokens[i] = NULL;
+	return (concat);
+}
 
-	free(tok);
-	return (tokens);
+/* frees prefix and returns a new malloc string*/
+char *str_cat(char *prefix, char *suffix)
+{
+	char *concat = str_dupcat(prefix, suffix);
+
+	free(prefix);
+
+	return (concat);
+}
+
+int str_match(char *txt_a, char *txt_b)
+{
+	int len_a, len_b, match = 0;
+	char *dup_a, *dup_b;
+
+	dup_a = str_strip(txt_a);
+	dup_b = str_strip(txt_b);
+
+	len_a = str_len(dup_a);
+	len_b = str_len(dup_b);
+
+	if (len_a == len_b)
+		match = str_nmatch(dup_a, dup_b, len_a);
+
+	free(dup_a);
+	free(dup_b);
+	return (match);
 }
 
 int str_nmatch(const char *txt_a, const char *txt_b, int n)
@@ -63,22 +114,72 @@ int str_nmatch(const char *txt_a, const char *txt_b, int n)
 	return (1);
 }
 
-char *str_concat(char *pre, char *post)
+char *str_duptok(char *text, char *delims)
 {
-	int a = 0, b = 0;
-	char *concat;
-	char *tail;
+	char *tok;
 
-	while (pre[a] != '\0')
-		a++;
-	while (post[b] != '\0')
-		b++;
+	tok = strtok(text, delims);
+	tok = str_dup(tok);
 
-	concat = malloc(sizeof(concat) * (a + b));
-	str_paste(&concat, pre);
+	return (tok);
+}
 
-	tail = &concat[a];
-	str_paste(&tail, post);
+char *str_ncopy(const char *text, int n)
+{
+	int c = 0;
+	char *copy;
 
-	return (concat);
+	copy = malloc(sizeof(char) * n + 1);
+
+	while ((c < n) && (text[c] != '\0'))
+	{
+		copy[c] = text[c];
+		c++;
+	}
+
+	copy[c] = '\0';
+
+	return (copy);
+}
+
+void strmem_realloc(char *buffer, int add)
+{
+	int len;
+	char *new_buffer;
+
+	len = str_len(buffer);
+	len = len + add + 1;
+
+	new_buffer = malloc(sizeof(char) * len);
+	strmem_init(&new_buffer, len, 0);
+	str_paste(&new_buffer, buffer);
+	free(buffer);
+}
+
+char *str_strip(char *text)
+{
+	int w = 0;
+	char **words, *sentence, *whitespace = " \t\n";
+
+	/* prepare memory */
+	sentence = malloc(sizeof(char)* 1);
+	strmem_init(&sentence, 1, 0);
+
+	/* create and break duplicate at whitespaces */
+	text = str_dup(text);
+	words = tokenize(text, whitespace, 2048);
+
+	/* reconstruct with collapsed whitespace */
+	while (words[w + 1] != NULL)
+	{
+		sentence = str_cat(sentence, words[w]);
+		sentence = str_cat(sentence, " ");
+		w++;
+	}
+	sentence = str_cat(sentence, words[w]);
+
+	free(text);
+	free(words);
+
+	return (sentence);
 }

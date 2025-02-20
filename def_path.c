@@ -1,10 +1,22 @@
-#include "util_str.h"
-#include "util_path.h"
-#include "util_env.h"
+#include "dec_str.h"
+#include "dec_path.h"
+#include "dec_env.h"
+#include "dec_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-/******** BASIC PATH HANDLING ********/
+int is_pathed(char *cmdpath)
+{
+	switch (cmdpath[0])
+	{
+		case '.':
+			return 1;
+		case '/':
+			return 1;
+		default:
+			return 0;
+	}
+}
 
 char *navigate_path()
 {
@@ -37,73 +49,52 @@ char *navigate_path()
 	}
 }
 
-void print_paths()
+int verify_fullpath(char *fullpath)
 {
-	char *path = navigate_path();
+	struct stat st;
 
-	do {
-		printf("%s\n", path);
-		path = navigate_path();
-	} while (path);
+	if (!stat(fullpath, &st))
+		return (1);
+	else
+		return (0);
 }
 
-/******** PATH CHAIN ********/
-
-/* comment out section if unneeded */
-
-linked_path *init_path_chain()
+char *build_fullpath(char *dirname, char *filename)
 {
-	linked_path
-		*head = malloc(sizeof(linked_path)),
-		*prev = head,
-		*next = NULL;
-	char *path = navigate_path();
+	char *dir_slash_file, *dir_slash;
 
-	head->path = str_dup(path);
-	head->prev = NULL;
-	head->next = NULL;
-	prev = head;
+	dir_slash = str_dupcat(dirname, "/");
+	dir_slash_file = str_dupcat(dir_slash, filename);
+	free(dir_slash);
 
-	while ((path = navigate_path()))
+	return (dir_slash_file);
+}
+
+char *_which(char *basename)
+{
+	char **paths, *fullpath, *pathenv, *mailback = NULL;
+	int p = 0;
+
+	if (is_pathed(basename))
+		return (str_dup(basename));
+
+	pathenv = _getenv("PATH");
+	pathenv = str_dup(pathenv);
+	paths = tokenize(pathenv, "=:", 64);
+
+	while (paths[p] != NULL)
 	{
-		next = malloc(sizeof(linked_path));
-		next->path = str_dup(path);
-		next->prev = prev;
-		next->next = NULL;
-
-		prev->next = next;
-		prev = next;
+		fullpath = build_fullpath(paths[p], basename);
+		if (verify_fullpath(fullpath))
+		{
+			mailback = fullpath;
+			break;
+		}
+		free(fullpath);
+		p++;
 	}
 
-	return (head);
-}
-
-linked_path *nav_path_chain(linked_path *head)
-{
-	static linked_path *current = NULL;
-	linked_path *returner;
-
-	if (head)
-		current = head;
-	else if (current != NULL)
-		current = current->next;
-
-	returner = current;
-	return (returner);
-}
-
-void erase_path_chain(linked_path *head)
-{
-	linked_path *next = head, *prev;
-
-	while (next != NULL)
-	{
-		free(next->prev);
-		free(next->path);
-
-		prev = next;
-		next = next->next;
-	}
-
-	free(prev);
+	free(paths);
+	free(pathenv);
+	return (mailback);
 }

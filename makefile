@@ -1,17 +1,22 @@
 CC = gcc
-
-CFLAGS = -Wall -Werror -Wextra -pedantic -ggdb3
-# I_FLAGS += $(shell pkg-config --cflags gtk4) # include flags
-# L_FLAGS += $(shell pkg-config --libs gtk4)   # link flags
-
-CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS}
+MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
+DEFS = def_*.c
+CFLAGS = -Wall -Werror -Wextra -ggdb3
+DB_FLAGS = -ggdb3
+# I_FLAGS = $(shell pkg-config --cflags gtk4)
+# L_FLAGS = $(shell pkg-config --libs gtk4)
+CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS} ${DB_FLAGS}
 
 .DELETE_ON_ERROR:
 
-.PHONY: clean 
+.PHONY: clean
 
-all: 
-	${CCMD} *.c -o hsh 
+all: simpsh
+
+simpsh:
+	clear
+	${CCMD} ${DEFS} shell_v2.c -o sh_v2.x
+	${MEMTEST} ./sh_v2.x
 
 clean:
-	$(RM) *~ *.exec *.o hsh
+	$(RM) *~ *.exec *.o *.out *.x
