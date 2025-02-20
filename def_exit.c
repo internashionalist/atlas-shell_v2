@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "util_exit.h"
-#include "util_str.h"
+#include "dec_exit.h"
+#include "dec_str.h"
 
 /*
  * str_numeric - checks if a string is a valid integer

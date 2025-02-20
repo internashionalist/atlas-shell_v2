@@ -236,3 +236,81 @@ char *_strcpy(char *dest, const char *src)
 
 	return (start); /* gives us a pointer to start of dest */
 }
+
+/**
+ * _strdup - dupes a string / allocs memory for a copy
+ * @str: source string
+ *
+ * Return: pointer to the newly allocated copy of the string,
+ *         or NULL if allocation fails / str is NULL
+ */
+char *_strdup(const char *str)
+{
+    char *copy, *p;
+    int len = 0;
+
+    if (!str) /* check for NULL pointer */
+        return (NULL);
+
+    while (str[len]) /* use Ariel's _strlen? */
+        len++;
+
+    copy = malloc(len + 1); /* memory for copy (+1 for null byte) */
+    if (!copy)
+        return (NULL);
+
+    p = copy; /* pointer to start of copy */
+    while (*str)
+    {
+        *p = *str;
+        p++;
+        str++;
+    }
+
+    *p = '\0'; /* null-terminate copy */
+
+    return (copy); /* shiny new pointer to copy */
+}
+
+/**
+ * _atoi - converts a string to an integer
+ * @s: string to convert
+ *
+ * Return: integer value of string
+ */
+int _atoi(const char *s)
+{
+	int i = 0; /* index */
+	int sign = 1; /* sign of number */
+	int result = 0; /* result of conversion */
+
+	while ( /* skip whitespace */
+		s[i] == ' ' ||
+		s[i] == '\t' ||
+		s[i] == '\n' ||
+		s[i] == '\v' ||
+		s[i] == '\f' ||
+		s[i] == '\r'
+	)
+	{
+		i++;
+	}
+
+	if (s[i] == '-') /* check for negative sign */
+	{
+		sign = -1; /* set negative sign */
+		i++;
+	}
+	else if (s[i] == '+') /* check for positive sign */
+	{
+		i++;
+	}
+
+	while (s[i] >= '0' && s[i] <= '9') /* convert string */
+	{
+		result = result * 10 + s[i] - '0'; /* convert digit */
+		i++;
+	}
+
+	return (result * sign); /* converted value */
+}

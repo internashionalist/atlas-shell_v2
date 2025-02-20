@@ -14,11 +14,11 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS} ${DB_FLAGS}
 all: checker
 
 checker:
-	${CC} ${CFLAGS} ${DEFS} shell_v2.c -o hsh
+	${CC} ${CFLAGS} ${DEFS} simpsh.c -o hsh
 
 test:
 	clear
-	${CCMD} ${DEFS} shell_v2.c -o sh_v2.x
+	${CCMD} ${DEFS} simpsh.c -o sh_v2.x
 	${MEMTEST} ./sh_v2.x
 
 clean:

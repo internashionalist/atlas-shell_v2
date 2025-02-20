@@ -3,11 +3,15 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "defined_functions/util_str.h"
-#include "defined_functions/util_which.h"
-#include "defined_functions/util_env.h"
-#include "defined_functions/util_cd.h"
-#include "defined_functions/util_exit.h"
+
+#include "dec_cmd.h"
+#include "dec_env.h"
+#include "dec_parser.h"
+#include "dec_path.h"
+#include "dec_str.h"
+#include "dec_util.h"
+#include "dec_exit.h"
+#include "dec_cd.h"
 
 int process_cmd(char **input_tokens)
 {
