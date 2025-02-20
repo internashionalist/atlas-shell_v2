@@ -171,6 +171,8 @@ char *str_strip(char *text)
 	return (sentence);
 }
 
+/* MOVE DEFINITIONS OUT */
+
 char *remove_comment(char *text, char *comment)
 {
 	/* line is a comment */
