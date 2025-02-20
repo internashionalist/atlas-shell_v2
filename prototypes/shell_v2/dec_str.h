@@ -1,7 +1,6 @@
 #ifndef _STR_
 #define _STR_
 
-char **tokenize(char *text, char *delims, int limit);
 char *str_cat(char *prefix, char *suffix);
 char *str_dup(const char *source);
 char *str_dupcat(const char *prefix, char *suffix);

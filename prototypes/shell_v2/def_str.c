@@ -103,25 +103,6 @@ char *str_duptok(char *text, char *delims)
 	return (tok);
 }
 
-char **tokenize(char *text, char *delims, int limit)
-{
-	char **tokens = malloc(sizeof(void *) * limit);
-	char *tok;
-	int i = 0;
-
-	tok = strtok(text, delims);
-
-	do {
-		tokens[i] = tok;
-		tok = strtok(NULL, delims);
-	} while ((++i < limit) && (tok != NULL));
-
-	tokens[i] = NULL;
-
-	free(tok);
-	return (tokens);
-}
-
 char *str_ncopy(const char *text, int n)
 {
 	int c = 0;
@@ -183,42 +164,3 @@ char *str_strip(char *text)
 }
 
 /* MOVE DEFINITIONS OUT */
-
-char *remove_comment(char *text, char *comment)
-{
-	/* line is a comment */
-	for (int c = 0; comment[c] != '\0'; c++)
-		if (comment[c] == text[0])
-			return (NULL);
-
-	/* extract non-comment slice*/
-	text = str_dup(text);
-	text = strtok(text, comment);
-	return (text);
-}
-
-char *read_line(char *text)
-{
-	static char **lines;
-	static char *buffer = NULL;
-	static int l = 0;
-	char *line;
-
-	if (text)
-	{
-		buffer = str_dup(text);
-		lines = tokenize(buffer, "\n", 2048);
-	}
-
-	if ((line = lines[l]))
-		l++;
-	else
-	{
-		l = 0;
-		free(buffer);
-		free(lines);
-		/* wipe_tokens(lines); */
-	}
-
-	return (line);
-}

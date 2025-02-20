@@ -110,6 +110,25 @@ char *_get_partition(char *copy, int *pos, int *sep, part kind)
 	return (partition);
 }
 
+char **tokenize(char *text, char *delims, int limit)
+{
+	char **tokens = malloc(sizeof(void *) * limit);
+	char *tok;
+	int i = 0;
+
+	tok = strtok(text, delims);
+
+	do {
+		tokens[i] = tok;
+		tok = strtok(NULL, delims);
+	} while ((++i < limit) && (tok != NULL));
+
+	tokens[i] = NULL;
+
+	free(tok);
+	return (tokens);
+}
+
 char *get_separation(const char *line, int *sep)
 {
 	static int pos = 0;
@@ -164,4 +183,17 @@ char *get_redirection(const char *line, int *redir)
 	}
 
 	return (redirection);
+}
+
+char *remove_comment(char *text, char *comment)
+{
+	/* line is a comment */
+	for (int c = 0; comment[c] != '\0'; c++)
+		if (comment[c] == text[0])
+			return (NULL);
+
+	/* extract non-comment slice*/
+	text = str_dup(text);
+	text = strtok(text, comment);
+	return (text);
 }

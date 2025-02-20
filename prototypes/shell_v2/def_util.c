@@ -1,6 +1,7 @@
 #include "dec_path.h"
 #include "dec_util.h"
 #include "dec_parser.h"
+#include "dec_str.h"
 #include "dec_env.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,4 +96,30 @@ void print_env()
 		printf("[%d] %s\n", i, environ[i]);
 		i++;
 	}
+}
+
+char *read_line(char *text)
+{
+	static char **lines;
+	static char *buffer = NULL;
+	static int l = 0;
+	char *line;
+
+	if (text)
+	{
+		buffer = str_dup(text);
+		lines = tokenize(buffer, "\n", 2048);
+	}
+
+	if ((line = lines[l]))
+		l++;
+	else
+	{
+		l = 0;
+		free(buffer);
+		free(lines);
+		/* wipe_tokens(lines); */
+	}
+
+	return (line);
 }
