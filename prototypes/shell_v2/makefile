@@ -15,5 +15,8 @@ all: simpsh
 
 simpsh:
 	clear
-	${CCMD} ${DEFS} shell_v2.c -o sh_v2
+	${CCMD} ${DEFS} shell_v2.c -o sh_v2.x
 	${MEMTEST} ./sh_v2
+
+clean:
+	$(RM) *~ *.exec *.o *.out *.x
