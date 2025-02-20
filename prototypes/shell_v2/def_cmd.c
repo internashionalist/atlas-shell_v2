@@ -126,6 +126,8 @@ int proc_cmds(char *line)
 	char *separ, *filename = NULL, *cmd, **cmd_tokens, *cmdpath;
 	int sep, red, fdesc = -1, cmdexit, skip = 0;
 
+	line = str_strip(line);
+
 	while ((separ = get_separation(line, &sep)))
 	{
 		fdesc = STDOUT_FILENO;
@@ -150,6 +152,8 @@ int proc_cmds(char *line)
 		free(cmd_tokens);
 		free(separ);
 	}
+
+	free(line);
 
 	return (0);
 }

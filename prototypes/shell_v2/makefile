@@ -14,5 +14,6 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS} ${DB_FLAGS}
 all: simpsh
 
 simpsh:
-	${CCMD} ${DEFS} interpretor.test.c -o interpreter.exec
-	# ${MEMTEST} ./interpreter.exec ./dummy_logic.sh
+	clear
+	${CCMD} ${DEFS} shell_v2.c -o sh_v2
+	${MEMTEST} ./sh_v2
