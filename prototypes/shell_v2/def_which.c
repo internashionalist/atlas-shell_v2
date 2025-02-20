@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "util_str.h"
-#include "util_path.h"
-#include "util_env.h"
+#include "dec_str.h"
+#include "dec_path.h"
+#include "dec_env.h"
 
 char *_which(char *basename)
 {
