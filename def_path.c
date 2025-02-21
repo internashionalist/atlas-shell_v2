@@ -79,6 +79,9 @@ char *_which(char *basename)
 		return (str_dup(basename));
 
 	pathenv = _getenv("PATH");
+	if (!pathenv)
+		return (NULL);
+
 	pathenv = str_dup(pathenv);
 	paths = tokenize(pathenv, "=:", 64);
 
