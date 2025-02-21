@@ -162,22 +162,32 @@ int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 
 int _redir_left(char *filename, int append)
 {
-	int fdesc;
-	int fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
-	int fflags = O_CREAT | /*O_CLOEXEC |*/ O_WRONLY | append;
-
-	fdesc = open(filename, fflags, fmode);
-	/* fcntl(fdesc, F_SETFD, FD_CLOEXEC); */
-	/* fdesc = fcntl(fdesc, F_DUPFD_CLOEXEC); */
-
-	dup2(fdesc, STDOUT_FILENO);
-
-	return (fdesc);
+    int fdesc;
+    int fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
+    int fflags = O_CREAT | O_WRONLY | append;
+    fdesc = open(filename, fflags, fmode);
+    return fdesc;
 }
+
+
+int _redir_left_input(char *filename)
+{
+    int fdesc;
+
+    fdesc = open(filename, O_RDONLY);
+
+    if (fdesc < 0)
+        perror(filename);
+
+    return fdesc;
+}
+
 
 int _setup_redir(char *filename, int fdesc, int code)
 {
-	if (fdesc != STDOUT_FILENO)
+	if ((code == LOUT || code == LLOUT) && fdesc != STDOUT_FILENO)
+		close(fdesc);
+	if (code == RIN && fdesc != STDIN_FILENO)
 		close(fdesc);
 
 	filename = str_strip(filename);
@@ -189,6 +199,9 @@ int _setup_redir(char *filename, int fdesc, int code)
 		break;
 	case (LLOUT):
 		fdesc = _redir_left(filename, O_APPEND);
+		break;
+	case (RIN):
+		fdesc = _redir_left_input(filename);
 		break;
 	default:
 		fdesc = -1;
@@ -204,11 +217,11 @@ int _resolve_logic(int cmdexit, int operand)
 	switch (operand)
 	{
 	case (BBAR):
-		if (cmdexit)
+		if (cmdexit == 0)
 			return (1);
 		break;
 	case (AAND):
-		if (!cmdexit)
+		if (cmdexit == 1)
 			return (1);
 		break;
 	}
@@ -231,10 +244,12 @@ int proc_cmds(char *line)
 		cmd = get_redirection(separ, &red);
 		cmd = str_dup(cmd);
 
-		do {
-			if (red > -1 )
-				fdesc = _setup_redir(filename, fdesc, red);
-		} while ((filename = get_redirection(separ, &red)));
+		filename = get_redirection(separ, &red);
+        while (filename != NULL)
+        {
+            fdesc = _setup_redir(filename, fdesc, red);
+            filename = get_redirection(separ, &red);
+        }
 
 		cmd_tokens = _get_cmd(cmd, &cmdpath);
 
