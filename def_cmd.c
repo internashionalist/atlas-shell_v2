@@ -195,39 +195,6 @@ int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 }
 
 
-int _heredoc_input(char *delimiter)
-{
-    char *line = NULL;
-    size_t len = 0;
-    FILE *tmp = tmpfile();
-    int fd;
-
-    if (!tmp) /* check for tmpfile creation */
-    {
-        perror("tmpfile");
-        return -1;
-    }
-
-    while (getline(&line, &len, stdin) != -1) /* read from stdin */
-    {
-        size_t l = strlen(line);
-
-        if (l > 0 && line[l - 1] == '\n') /* remove newline */
-            line[l - 1] = '\0';
-        if (strcmp(line, delimiter) == 0)
-            break;
-        fprintf(tmp, "%s\n", line); /* write to tmpfile */
-    }
-
-    free(line);
-    rewind(tmp); /* rewind file pointer to beginning */
-
-    fd = dup(fileno(tmp));
-    fclose(tmp);
-    return fd;
-}
-
-
 int _redir_left(char *filename, int append)
 {
     int fdesc;
@@ -271,9 +238,9 @@ int _setup_redir(char *filename, int fdesc, int code)
 	case (RIN):
 		fdesc = _redir_left_input(filename);
 		break;
-	case (RRIN):
-		fdesc = _heredoc_input(filename);
-		break;
+	/* case (RRIN):
+		fdesc = heredoc function
+		break; */
 	default:
 		fdesc = -1;
 	}
