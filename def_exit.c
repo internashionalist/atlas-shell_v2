@@ -49,7 +49,7 @@ void exit_shell(char **input_tokens)
         {
             fprintf(stderr, "exit: %s: numeric argument required\n",
                 input_tokens[1]);
-            return;
+            status = 2;
         }
 
         status = _atoi(input_tokens[1]); /* convert to integer */
