@@ -25,14 +25,17 @@ int handle_builtin(char **input_tokens)
     if (_strcmp(input_tokens[0], "exit") == 0)
     {
         exit_shell(input_tokens);
+        return (1);
     }
     else if (_strcmp(input_tokens[0], "cd") == 0)
     {
         change_dir(input_tokens);
+        return (1);
     }
     else if (_strcmp(input_tokens[0], "env") == 0)
     {
         print_env();
+        return (1);
     }
-    return 1;  /* built-in handled */
+    return (0);  /* built-in handled */
 }
