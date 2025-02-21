@@ -242,7 +242,7 @@ int proc_cmds(char *line)
 			if (cmd_tokens[0] && !is_builtin(cmd_tokens[0]) &&
 				cmdpath == NULL)
 			{
-				fprintf(stderr, "Command not found: %s\n", cmd_tokens[0]);
+				fprintf(stderr, "./hsh: 1: %s: not found\n", cmd_tokens[0]);
 				cmdexit = 0;
 			}
 			else
