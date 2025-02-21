@@ -6,11 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 int analyze_paths(char **paths, char *filename)
 {
 	struct stat st;
 	char *fullpath;
-	int err = 0;
+	int err = -1;
 
 	for (int p = 1; paths[p] != NULL; p++)
 	{
@@ -31,15 +32,18 @@ int analyze_paths(char **paths, char *filename)
 	return (err);
 }
 
+
 void print_paths()
 {
 	char *path = navigate_path();
 
-	do {
+	while (path)
+	{
 		printf("%s\n", path);
 		path = navigate_path();
-	} while (path);
+	}
 }
+
 
 int print_fullpath(char *fullpath, struct stat *st)
 {
@@ -107,18 +111,30 @@ char *read_line(char *text)
 
 	if (text)
 	{
+		if (buffer)
+			free(buffer);
+		if (lines)
+			free(lines);
 		buffer = str_dup(text);
 		lines = tokenize(buffer, "\n", 2048);
+		l = 0;
 	}
 
-	if ((line = lines[l]))
+	if (lines && lines[l])
+	{
+		line = lines[l];
 		l++;
+	}
 	else
 	{
 		l = 0;
-		free(buffer);
-		free(lines);
-		/* wipe_tokens(lines); */
+		if (buffer)
+			free(buffer);
+		if (lines)
+			free(lines);
+		buffer = NULL;
+		lines = NULL;
+		line = NULL;
 	}
 
 	return (line);

@@ -11,6 +11,7 @@
 #include "dec_parser.h"
 #include "dec_cmd.h"
 #include "dec_builtins.h"
+#include "dec_util.h"
 
 #define READ_END  0
 #define WRITE_END 1
