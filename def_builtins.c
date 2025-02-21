@@ -6,16 +6,18 @@
 #include "dec_str.h"
 #include "dec_exit.h"
 
-int is_builtin(char **input_tokens)
-{
-    if (_strcmp(input_tokens[0], "exit") == 0)
-        return 1;
-    if (_strcmp(input_tokens[0], "cd") == 0)
-        return 2;
-    if (_strcmp(input_tokens[0], "env") == 0)
-        return 3;
 
-    return 0;  /* not a built-in */
+int is_builtin(char *cmd)
+{
+    if (!cmd)
+        return 0;
+    if (_strcmp(cmd, "echo") == 0)
+        return 1;
+    if (_strcmp(cmd, "cd") == 0)
+        return 1;
+    if (_strcmp(cmd, "exit") == 0)
+        return 1;
+    return 0;
 }
 
 int handle_builtin(char **input_tokens)

@@ -9,7 +9,7 @@
 #include "dec_str.h"
 #include "dec_exit.h"
 
-int is_builtin(char **input_tokens);
+int is_builtin(char *cmd);
 int handle_builtin(char **input_tokens);
 
 #endif /* _builtins_h_ */
