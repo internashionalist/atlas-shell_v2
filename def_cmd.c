@@ -94,7 +94,43 @@ int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
     int writeout;
     int linker[2];
 
-    /* check if built-in */
+	if (code == RIN || code == RRIN) /* input redirection */
+    {
+        if (is_builtin(cmd_tokens[0]))
+        {
+            int save_in = dup(STDIN_FILENO);
+            dup2(fdesc, STDIN_FILENO);
+            wstatus = handle_builtin(cmd_tokens);
+            dup2(save_in, STDIN_FILENO);
+            close(save_in);
+        }
+        else
+        {
+            pid_t pid = fork();
+            if (pid == -1)
+            {
+                perror("fork");
+                return 0;
+            }
+            if (pid == 0)
+            {
+                dup2(fdesc, STDIN_FILENO);
+                if (cmdpath)
+                    execve(cmdpath, cmd_tokens, environ);
+                perror("execve");
+                _exit(127);
+            }
+            else
+            {
+                wait(&wstatus);
+            }
+        }
+        if (fdesc != STDIN_FILENO)
+            close(fdesc);
+        return wstatus;
+    }
+
+    /* otherwise, handle output redir / piping */
     if (cmd_tokens[0] && is_builtin(cmd_tokens[0]))
     {
         /* 
@@ -149,7 +185,6 @@ int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 
         if (readin != STDIN_FILENO)
             close(readin);
-
         if (code == BAR)
             readin = linker[READ_END];
         else
@@ -157,6 +192,39 @@ int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
     }
 
     return wstatus;
+}
+
+
+int _heredoc_input(char *delimiter)
+{
+    char *line = NULL;
+    size_t len = 0;
+    FILE *tmp = tmpfile();
+    int fd;
+
+    if (!tmp) /* check for tmpfile creation */
+    {
+        perror("tmpfile");
+        return -1;
+    }
+
+    while (getline(&line, &len, stdin) != -1) /* read from stdin */
+    {
+        size_t l = strlen(line);
+
+        if (l > 0 && line[l - 1] == '\n') /* remove newline */
+            line[l - 1] = '\0';
+        if (strcmp(line, delimiter) == 0)
+            break;
+        fprintf(tmp, "%s\n", line); /* write to tmpfile */
+    }
+
+    free(line);
+    rewind(tmp); /* rewind file pointer to beginning */
+
+    fd = dup(fileno(tmp));
+    fclose(tmp);
+    return fd;
 }
 
 
@@ -187,7 +255,7 @@ int _setup_redir(char *filename, int fdesc, int code)
 {
 	if ((code == LOUT || code == LLOUT) && fdesc != STDOUT_FILENO)
 		close(fdesc);
-	if (code == RIN && fdesc != STDIN_FILENO)
+	if ((code == RIN  || code == RRIN) && fdesc != STDIN_FILENO)
 		close(fdesc);
 
 	filename = str_strip(filename);
@@ -202,6 +270,9 @@ int _setup_redir(char *filename, int fdesc, int code)
 		break;
 	case (RIN):
 		fdesc = _redir_left_input(filename);
+		break;
+	case (RRIN):
+		fdesc = _heredoc_input(filename);
 		break;
 	default:
 		fdesc = -1;
