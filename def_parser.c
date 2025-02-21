@@ -7,7 +7,7 @@
 
 char *deserialize(char **series)
 {
-	char *result = result = str_dup("");
+	char *result = str_dup("");
 	int i = 0;
 
 	while (series[i] != NULL)
