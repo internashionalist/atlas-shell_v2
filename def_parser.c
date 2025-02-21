@@ -85,7 +85,7 @@ char **delims)
 	case SEPAR:
 		*char_check = _check_sep_chars;
 		*is_double = _is_double_sep;
-		*delims = ";|&";
+		*delims = ";|&\n";
 		break;
 	case REDIR:
 		*char_check = _check_redir_chars;
