@@ -158,31 +158,37 @@ void strmem_realloc(char *buffer, int add)
 
 char *str_strip(char *text)
 {
-	int w = 0;
-	char **words, *sentence, *whitespace = " \t\n";
+    int w = 0;
+    char **words, *sentence;
+    char *whitespace = " \t\n";
 
-	/* prepare memory */
-	sentence = malloc(sizeof(char)* 1);
-	strmem_init(&sentence, 1, 0);
+    sentence = malloc(1); /* mem for empty string */
+    if (!sentence)
+        return NULL;
+    sentence[0] = '\0';
 
-	/* create and break duplicate at whitespaces */
-	text = str_dup(text);
-	words = tokenize(text, whitespace, 2048);
+    text = str_dup(text); /* dupe for modification */
+    words = tokenize(text, whitespace, 2048);
 
-	/* reconstruct with collapsed whitespace */
-	while (words[w + 1] != NULL)
-	{
-		sentence = str_cat(sentence, words[w]);
-		sentence = str_cat(sentence, " ");
-		w++;
-	}
+    if (words[0] == NULL)
+    {
+        free(text);
+        free(words);
+        return sentence;
+    }
 
-	sentence = str_cat(sentence, words[w]);
+    while (words[w + 1] != NULL) /* reconstruct string */
+    {
+        sentence = str_cat(sentence, words[w]); 
+        sentence = str_cat(sentence, " ");
+        w++;
+    }
+    sentence = str_cat(sentence, words[w]); /* last word */
 
-	free(text);
-	free(words);
+    free(text);
+    free(words);
 
-	return (sentence);
+    return sentence;
 }
 
 /**
