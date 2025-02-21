@@ -13,11 +13,11 @@ int is_builtin(char *cmd)
         return 0;
     if (_strcmp(cmd, "echo") == 0)
         return 1;
-    if (_strcmp(cmd, "env") == 0)
+    if (_strcmp(cmd, "exit") == 0)
         return 1;
     if (_strcmp(cmd, "cd") == 0)
         return 1;
-    if (_strcmp(cmd, "exit") == 0)
+    if (_strcmp(cmd, "env") == 0)
         return 1;
     return 0;
 }

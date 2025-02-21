@@ -93,7 +93,7 @@ void print_env()
 	int i = 0;
 	while (environ[i] != NULL)
 	{
-		printf("[%d] %s\n", i, environ[i]);
+		printf("%s\n", environ[i]);
 		i++;
 	}
 }
