@@ -107,14 +107,21 @@ char *read_line(char *text)
 	static char **lines;
 	static char *buffer = NULL;
 	static int l = 0;
-	char *line;
+	char *line = NULL;
 
 	if (text)
 	{
 		if (buffer)
+		{
 			free(buffer);
+			buffer = NULL;
+		}
 		if (lines)
+		{
 			free(lines);
+			lines = NULL;
+		}
+
 		buffer = str_dup(text);
 		lines = tokenize(buffer, "\n", 2048);
 		l = 0;
@@ -124,18 +131,23 @@ char *read_line(char *text)
 	{
 		line = lines[l];
 		l++;
+		return (line);
 	}
 	else
 	{
 		l = 0;
 		if (buffer)
+		{
 			free(buffer);
+			buffer = NULL;
+		}
 		if (lines)
+		{
 			free(lines);
-		buffer = NULL;
-		lines = NULL;
-		line = NULL;
-	}
+			lines = NULL;
+		}
+		l = 0;
 
-	return (line);
+		return (NULL);
+	}
 }
