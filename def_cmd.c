@@ -13,12 +13,25 @@
 #define READ_END  0
 #define WRITE_END 1
 
+
 char **_get_cmd(char *cmd, char **cmdpath)
 {
 	char **cmd_tokens;
 
 	cmd_tokens = tokenize(cmd, " ", 512);
-	*cmdpath = _which(cmd_tokens[0]);
+
+	if (cmd_tokens[0] &&
+		(cmd_tokens[0][0] == '/' || cmd_tokens[0][0] == '.'))
+	{
+		if (access(cmd_tokens[0], X_OK) == 0)
+			*cmdpath = str_dup(cmd_tokens[0]);
+		else
+			*cmdpath = NULL;
+	}
+	else
+	{
+		*cmdpath = _which(cmd_tokens[0]);
+	}
 
 	return (cmd_tokens);
 }
@@ -39,19 +52,26 @@ int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
 	switch (fork())
 	{
 		case -1:
+			perror("fork");
 			return (0);
 		case 0:
 			close(linker[READ_END]);
 			dup2(readin, STDIN_FILENO);
 			dup2(writeout, STDOUT_FILENO);
-			execve(cmdpath, cmd_tokens, environ);
-			return (0);
+
+			if (cmdpath)
+				execve(cmdpath, cmd_tokens, environ);
+
+			perror("execve");
+			exit(127);
 		default:
 			wait(&wstatus);
 			if (writeout != STDOUT_FILENO)
 				close(writeout);
+
 			if (readin != STDIN_FILENO)
 				close(readin);
+
 			if (code == BAR)
 				readin = linker[READ_END];
 			else
@@ -124,7 +144,7 @@ int _resolve_logic(int cmdexit, int operand)
 int proc_cmds(char *line)
 {
 	char *separ, *filename = NULL, *cmd, **cmd_tokens, *cmdpath;
-	int sep, red, fdesc, saveout, cmdexit, skip = 0;
+	int sep, red, fdesc, saveout, cmdexit = 1, skip = 0;
 
 	line = str_strip(line);
 
@@ -132,7 +152,9 @@ int proc_cmds(char *line)
 	{
 		saveout = dup(STDOUT_FILENO);
 		fdesc = STDOUT_FILENO;
+
 		separ = str_dup(separ);
+
 		cmd = get_redirection(separ, &red);
 		cmd = str_dup(cmd);
 
@@ -149,6 +171,7 @@ int proc_cmds(char *line)
 		skip = _resolve_logic(cmdexit, sep);
 
 		dup2(saveout, STDOUT_FILENO);
+		close(saveout);
 
 		free(cmd);
 		free(cmdpath);

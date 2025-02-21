@@ -140,7 +140,6 @@ char **tokenize(char *text, char *delims, int limit)
 
 	tokens[i] = NULL;
 
-	free(tok);
 	return (tokens);
 }
 

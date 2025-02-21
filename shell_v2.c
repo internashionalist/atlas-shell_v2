@@ -52,7 +52,7 @@ int main(int argc, char **argv)
                 continue;
             }
 
-            if (is_builtin(input_tokens)) 
+            if (is_builtin(input_tokens))
             {
                 handle_builtin(input_tokens);  /* process built-in command */
             }
