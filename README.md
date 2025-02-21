@@ -33,14 +33,14 @@
   - Executes commands with flags and arguments (e.g. ls -l /tmp).
   - Searches the directories in PATH if a command is not an absolute or relative path.
 - Input & Output Redirection
-  - > Redirects stdout to a file (truncate).
-  - >> Redirects stdout to a file (append).
-  - < Reads stdin from a file.
-  - << Supports simple “here doc”-style input in certain builds (not fully tested).
+  - `>` Redirects stdout to a file (truncate).
+  - `>>` Redirects stdout to a file (append).
+  - `<` Reads stdin from a file.
+  - `<<` Supports simple “here doc”-style input in certain builds (not fully tested).
 - Logical & Command Separators
-  - ; Runs multiple commands sequentially.
-  - && (short-circuit AND): Runs the next command only if the previous succeeded.
-  - || (short-circuit OR): Runs the next command only if the previous failed.
+  - `;` Runs multiple commands sequentially.
+  - `&&` (short-circuit AND): Runs the next command only if the previous succeeded.
+  - `||` (short-circuit OR): Runs the next command only if the previous failed.
 - Piping
   - Single and connected pipes (e.g., ls -l | grep "txt" | wc -l) are supported.
   - Passes the stdout of one command as the stdin of the next.
