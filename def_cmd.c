@@ -80,10 +80,7 @@ static int run_external(char *cmdpath, char **cmd_tokens, int fdesc)
             close(fdesc);
     }
 
-    if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0)
-        return 1;
-    else
-        return 0;
+    return wstatus;
 }
 
 
@@ -133,9 +130,6 @@ int _run_cmd(char *cmdpath, char **cmd_tokens, int code, int fdesc)
     /* otherwise, handle output redir / piping */
     if (cmd_tokens[0] && is_builtin(cmd_tokens[0]))
     {
-        /* 
-         * For piping: if code == BAR, we need a pipe for next command's input.
-         */
         pipe(linker);
         if (fdesc != STDOUT_FILENO)
             writeout = fdesc;
@@ -209,14 +203,11 @@ int _redir_left(char *filename, int append)
 }
 
 
-int _redir_left_input(char *filename)
+int _redir_left_input(char *delimiter)
 {
     int fdesc;
     char *input = NULL;
     size_t len = 0;
-
-    if (filename == NULL || str_len(filename) == 0)
-        return -1;
 
     fdesc = open("/tmp/heredoc_temp_file", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fdesc < 0)
@@ -224,10 +215,10 @@ int _redir_left_input(char *filename)
 
     while (getline(&input, &len, stdin) != -1)
     {
-        if (_strcmp(input, filename) == 0)
+        if (_strncmp(input, delimiter, str_len(delimiter)) == 0 && input[str_len(delimiter)] == '\n')
             break;
 
-        write(fdesc, input, strlen(input));
+        write(fdesc, input, str_len(input));
     }
 
     free(input);
@@ -262,9 +253,9 @@ int _setup_redir(char *filename, int fdesc, int code)
 	case (RIN):
 		fdesc = _redir_left_input(filename);
 		break;
-	/* case (RRIN):
-		fdesc = heredoc function
-		break; */
+	case (RRIN):
+        fdesc = _redir_left_input(filename);
+        break;
 	default:
 		fdesc = -1;
 	}

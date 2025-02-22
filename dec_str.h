@@ -13,6 +13,7 @@ void str_paste(char **dest, const char *source);
 int find_string(char **strings, char *str);
 int str_match(char *txt_a, char *txt_b);
 int _strcmp(const char *s1, const char *s2);
+int _strncmp(const char *str1, const char *str2, int n);
 char *_strcpy(char *dest, const char *src);
 char *_strdup(const char *str);
 int _atoi(const char *s);

@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -217,6 +218,37 @@ int _strcmp(const char *s1, const char *s2)
 
 	return (diff); /* difference between strings */
 }
+
+
+/**
+ * _strncmp - compares two strings up to n characters
+ * @str1: first string
+ * @str2: second string
+ * @n: number of characters to compare
+ *
+ * Return: 0 if strings are equal, otherwise the difference
+ */
+int _strncmp(const char *str1, const char *str2, int n)
+{
+    int i = 0;
+
+    while (i < n && str1[i] != '\0' && str2[i] != '\0')
+    {
+        if (str1[i] != str2[i])
+        {
+            return (unsigned char)str1[i] - (unsigned char)str2[i];
+        }
+        i++;
+    }
+
+    if (i < n)
+    {
+        return (unsigned char)str1[i] - (unsigned char)str2[i];
+    }
+
+    return 0;
+}
+
 
 /**
  * _strcpy - copies a string from src to dest
