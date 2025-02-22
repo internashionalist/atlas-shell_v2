@@ -200,7 +200,11 @@ int _redir_left(char *filename, int append)
     int fdesc;
     int fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
     int fflags = O_CREAT | O_WRONLY | append;
+
     fdesc = open(filename, fflags, fmode);
+
+    dup2(fdesc, STDOUT_FILENO);
+
     return fdesc;
 }
 
@@ -250,6 +254,7 @@ int _setup_redir(char *filename, int fdesc, int code)
 	return (fdesc);
 }
 
+
 int _resolve_logic(int cmdexit, int operand)
 {
 	switch (operand)
@@ -266,18 +271,17 @@ int _resolve_logic(int cmdexit, int operand)
 	return (0);
 }
 
+
 int proc_cmds(char *line)
 {
 	char *separ, *filename = NULL, *cmd, **cmd_tokens, *cmdpath;
-	int sep, red, fdesc, saveout, cmdexit = 1, skip = 0;
+	int sep, red, fdesc = -1, cmdexit, skip = 0;
 
 	line = str_strip(line);
 
 	while ((separ = get_separation(line, &sep)))
 	{
-		saveout = dup(STDOUT_FILENO);
 		fdesc = STDOUT_FILENO;
-
 		separ = str_dup(separ);
 		cmd = get_redirection(separ, &red);
 		cmd = str_dup(cmd);
@@ -305,13 +309,7 @@ int proc_cmds(char *line)
 			}
 		}
 
-		if (_resolve_logic(cmdexit, sep))
-			skip = 0;
-		else
-			skip = 1;
-
-		dup2(saveout, STDOUT_FILENO);
-		close(saveout);
+        skip = _resolve_logic(cmdexit, sep);
 
 		free(cmd);
 		free(cmdpath);
