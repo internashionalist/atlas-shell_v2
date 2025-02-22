@@ -212,11 +212,31 @@ int _redir_left(char *filename, int append)
 int _redir_left_input(char *filename)
 {
     int fdesc;
+    char *input = NULL;
+    size_t len = 0;
 
-    fdesc = open(filename, O_RDONLY);
+    if (filename == NULL || str_len(filename) == 0)
+        return -1;
 
+    fdesc = open("/tmp/heredoc_temp_file", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fdesc < 0)
-        perror(filename);
+        return -1;
+
+    while (getline(&input, &len, stdin) != -1)
+    {
+        if (_strcmp(input, filename) == 0)
+            break;
+
+        write(fdesc, input, strlen(input));
+    }
+
+    free(input);
+
+    close(fdesc);
+
+    fdesc = open("/tmp/heredoc_temp_file", O_RDONLY);
+    if (fdesc < 0)
+        return -1;
 
     return fdesc;
 }
@@ -259,14 +279,14 @@ int _resolve_logic(int cmdexit, int operand)
 {
 	switch (operand)
 	{
-	case (BBAR):
-		if (cmdexit == 0)
-			return (1);
-		break;
-	case (AAND):
-		if (cmdexit == 1)
-			return (1);
-		break;
+	    case (BBAR):
+		    if (cmdexit == 0)
+			    return (1);
+		    break;
+	    case (AAND):
+		    if (cmdexit == 1)
+			    return (1);
+		    break;
 	}
 	return (0);
 }
